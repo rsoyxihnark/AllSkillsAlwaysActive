@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Internal comment tidy up.
+
 ## 1.1.0
 
 - Every skill you have already learned switches itself on the first time you load a save, so a playthrough already under way needs no Potion of Clearance.
