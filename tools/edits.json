@@ -1,264 +1,290 @@
 [
  {
-  "name": "the always active skill list",
-  "function": "",
-  "before": [
-   "\tprivate   saved var mutationSkillSlotsInitialized : bool;\t\t\t\t\t",
-   "\t"
-  ],
-  "remove": [],
-  "insert": [
-   "\tprivate \t\tvar activeSkills : array<ESkill>;\t\t\t\t\t\t\t\t"
+  "file": "content/scripts/game/gameplay/ability/playerAbilityManager.ws",
+  "base": "game/gameplay/ability/PlayerAbilityManager.ws",
+  "edits": [
+   {
+    "name": "the always active skill list",
+    "function": "",
+    "before": [
+     "\tprivate   saved var mutationSkillSlotsInitialized : bool;\t\t\t\t\t",
+     "\t"
+    ],
+    "remove": [],
+    "insert": [
+     "\tprivate \t\tvar activeSkills : array<ESkill>;\t\t\t\t\t\t\t\t"
+    ]
+   },
+   {
+    "name": "the catch up working variables",
+    "function": "public final function PostInit()",
+    "before": [
+     "\t{\t\t",
+     "\t\tvar i, playerLevel : int;"
+    ],
+    "remove": [],
+    "insert": [
+     "\t\tvar catchUpSkill : ESkill;",
+     "\t\tvar catchUpAbilityName : name;",
+     "\t\tvar catchUpIsPassive : bool;",
+     "\t\tvar orphanSkill : ESkill;",
+     "\t\tvar orphanAbilityName : name;",
+     "\t\tvar orphanIsPassive : bool;",
+     "\t\tvar k, s : int;",
+     "\t\tvar socketed : bool;"
+    ]
+   },
+   {
+    "name": "the always active list and the load time catch up",
+    "function": "public final function PostInit()",
+    "before": [
+     "\t\t\tmutationSkillSlotsInitialized = true;",
+     "\t\t}"
+    ],
+    "remove": [],
+    "insert": [
+     "\t\tactiveSkills.Clear();",
+     "\t\tactiveSkills.PushBack(S_Sword_s21); // Fast Attack - Muscle Memory",
+     "\t\tactiveSkills.PushBack(S_Sword_s17); // Fast Attack - Precise Blows",
+     "\t\tactiveSkills.PushBack(S_Sword_s01); // Fast Attack - Whirl",
+     "\t\tactiveSkills.PushBack(S_Sword_s05); // Fast Attack - Crippling Strikes",
+     "\t\tactiveSkills.PushBack(S_Sword_s04); // Strong Attack - Strength Training",
+     "\t\tactiveSkills.PushBack(S_Sword_s08); // Strong Attack - Crushing Blows",
+     "\t\tactiveSkills.PushBack(S_Sword_s02); // Strong Attack - Rend",
+     "\t\tactiveSkills.PushBack(S_Sword_s06); // Strong Attack - Sunder Armor",
+     "\t\tactiveSkills.PushBack(S_Sword_s10); // Defense - Arrow Deflection",
+     "\t\tactiveSkills.PushBack(S_Sword_s09); // Defense - Fleet Footed",
+     "\t\tactiveSkills.PushBack(S_Sword_s11); // Defense - Counterattack",
+     "\t\tactiveSkills.PushBack(S_Sword_s03); // Defense - Deadly Precision",
+     "\t\tactiveSkills.PushBack(S_Sword_s13); // Marksmanship - Lightning Reflexes",
+     "\t\tactiveSkills.PushBack(S_Sword_s15); // Marksmanship - Cold Blood",
+     "\t\tactiveSkills.PushBack(S_Sword_s07); // Marksmanship - Anatomical Knowledge",
+     "\t\tactiveSkills.PushBack(S_Sword_s12); // Marksmanship - Crippling Shot",
+     "\t\tactiveSkills.PushBack(S_Sword_s16); // Battle Trance - Resolve",
+     "\t\tactiveSkills.PushBack(S_Sword_s18); // Battle Trance - Undying",
+     "\t\tactiveSkills.PushBack(S_Sword_s20); // Battle Trance - Razor Focus",
+     "\t\tactiveSkills.PushBack(S_Sword_s19); // Battle Trance - Flood of Anger",
+     "\t\tactiveSkills.PushBack(S_Magic_s20); // Aard Sign - Far-Reaching Aard",
+     "\t\tactiveSkills.PushBack(S_Magic_s12); // Aard Sign - Aard Intensity",
+     "\t\tactiveSkills.PushBack(S_Magic_s06); // Aard Sign - Shock Wave",
+     "\t\tactiveSkills.PushBack(S_Magic_s08); // Igni Sign - Melt Armor",
+     "\t\tactiveSkills.PushBack(S_Magic_s07); // Igni Sign - Igni Intensity",
+     "\t\tactiveSkills.PushBack(S_Magic_s09); // Igni Sign - Pyromaniac",
+     "\t\tactiveSkills.PushBack(S_Magic_s10); // Yrden Sign - Sustained Glyphs",
+     "\t\tactiveSkills.PushBack(S_Magic_s16); // Yrden Sign - Yrden Intensity",
+     "\t\tactiveSkills.PushBack(S_Magic_s11); // Yrden Sign - Supercharged Glyphs",
+     "\t\tactiveSkills.PushBack(S_Magic_s13); // Quen Sign - Exploding Shield",
+     "\t\tactiveSkills.PushBack(S_Magic_s15); // Quen Sign - Quen Intensity",
+     "\t\tactiveSkills.PushBack(S_Magic_s14); // Quen Sign - Quen Discharge",
+     "\t\tactiveSkills.PushBack(S_Magic_s17); // Axii Sign - Delusion",
+     "\t\tactiveSkills.PushBack(S_Magic_s18); // Axii Sign - Axii Intensity",
+     "\t\tactiveSkills.PushBack(S_Magic_s19); // Axii Sign - Domination",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s01); // Brewing - Heightened Tolerance",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s02); // Brewing - Refreshment",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s03); // Brewing - Delayed Recovery",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s04); // Brewing - Side Effects",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s12); // Oil Preparation - Poisoned Blades",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s05); // Oil Preparation - Protective Coating",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s06); // Oil Preparation - Fixative",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s07); // Oil Preparation - Hunter Instinct",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s09); // Bomb Creation - Steady Aim",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s10); // Bomb Creation - Pyrotechnics",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s08); // Bomb Creation - Efficiency",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s11); // Bomb Creation - Cluster Bombs",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s18); // Mutation - Acquired Tolerance",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s13); // Mutation - Tissue Transmutation",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s19); // Mutation - Synergy",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s14); // Mutation - Adaptation",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s16); // Trial of the Grasses - Frenzy",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s20); // Trial of the Grasses - Endure Pain",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s15); // Trial of the Grasses - Fast Metabolism",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s17); // Trial of the Grasses - Killing Spree",
+     "\t\tactiveSkills.PushBack(S_Perk_01); // General - Sun and Stars",
+     "\t\tactiveSkills.PushBack(S_Perk_02); // General - Steady Shot",
+     "\t\tactiveSkills.PushBack(S_Perk_13); // General - Metabolism Boosts",
+     "\t\tactiveSkills.PushBack(S_Perk_04); // General - Survival Instinct",
+     "\t\tactiveSkills.PushBack(S_Perk_09); // General - Rage Management",
+     "\t\tactiveSkills.PushBack(S_Perk_17); // General - Trick Shot",
+     "\t\tactiveSkills.PushBack(S_Perk_15); // General - Gourmet",
+     "\t\tactiveSkills.PushBack(S_Perk_05); // General - Cat School Techniques",
+     "\t\tactiveSkills.PushBack(S_Perk_11); // General - Focus",
+     "\t\tactiveSkills.PushBack(S_Perk_18); // General - Advanced Pyrotechnics",
+     "\t\tactiveSkills.PushBack(S_Perk_16); // General - In Combat's Fires",
+     "\t\tactiveSkills.PushBack(S_Perk_06); // General - Griffin School Techniques",
+     "\t\tactiveSkills.PushBack(S_Perk_10); // General - Adrenaline Burst",
+     "\t\tactiveSkills.PushBack(S_Perk_20); // General - Heavy Artillery",
+     "\t\tactiveSkills.PushBack(S_Perk_07); // General - Bear School Techniques",
+     "\t\tactiveSkills.PushBack(S_Perk_12); // General - Metabolic Control",
+     "\t\tactiveSkills.PushBack(S_Perk_22); // General - Strong Back",
+     "\t\tactiveSkills.PushBack(S_Perk_21); // General - Attack is the Best Defense",
+     "\t\t",
+     "\t\tif( (W3PlayerWitcher)owner )",
+     "\t\t{",
+     "\t\t\tfor(i=0; i<activeSkills.Size(); i+=1)",
+     "\t\t\t{",
+     "\t\t\t\tcatchUpSkill = activeSkills[i];",
+     "\t\t\t\t",
+     "\t\t\t\tif(skills[catchUpSkill].level <= 0)",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tif(GetSkillSlotID(catchUpSkill) > 0)",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tif(skills[catchUpSkill].remainingBlockedTime > 0 || IsAbilityBlocked(skills[catchUpSkill].abilityName))",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tcatchUpAbilityName = skills[catchUpSkill].abilityName;",
+     "\t\t\t\tcatchUpIsPassive = theGame.GetDefinitionsManager().AbilityHasTag(catchUpAbilityName, theGame.params.SKILL_GLOBAL_PASSIVE_TAG);",
+     "\t\t\t\t",
+     "\t\t\t\tif( (catchUpIsPassive && charStats.HasAbility(catchUpAbilityName)) || (!catchUpIsPassive && skillAbilities.Contains(catchUpAbilityName)) )",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tOnSkillEquip(catchUpSkill);",
+     "\t\t\t}",
+     "\t\t\t",
+     "\t\t\tfor(k=0; k<skills.Size(); k+=1)",
+     "\t\t\t{",
+     "\t\t\t\torphanSkill = skills[k].skillType;",
+     "\t\t\t\t",
+     "\t\t\t\tif(orphanSkill == S_SUndefined || IsCoreSkill(orphanSkill))",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tif(skills[k].level <= 0)",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tif(activeSkills.Contains(orphanSkill))",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\tsocketed = false;",
+     "\t\t\t\tfor(s=0; s<skillSlots.Size(); s+=1)",
+     "\t\t\t\t{",
+     "\t\t\t\t\tif(skillSlots[s].socketedSkill == orphanSkill)",
+     "\t\t\t\t\t{",
+     "\t\t\t\t\t\tsocketed = true;",
+     "\t\t\t\t\t\tbreak;",
+     "\t\t\t\t\t}",
+     "\t\t\t\t}",
+     "\t\t\t\tif(socketed)",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\t",
+     "\t\t\t\torphanAbilityName = skills[k].abilityName;",
+     "\t\t\t\tif(!IsNameValid(orphanAbilityName))",
+     "\t\t\t\t\tcontinue;",
+     "\t\t\t\torphanIsPassive = theGame.GetDefinitionsManager().AbilityHasTag(orphanAbilityName, theGame.params.SKILL_GLOBAL_PASSIVE_TAG);",
+     "\t\t\t\t",
+     "\t\t\t\tif( (orphanIsPassive && charStats.HasAbility(orphanAbilityName)) || (!orphanIsPassive && skillAbilities.Contains(orphanAbilityName)) )",
+     "\t\t\t\t{",
+     "\t\t\t\t\tOnSkillUnequip(orphanSkill);",
+     "\t\t\t\t}",
+     "\t\t\t}",
+     "\t\t}",
+     "\t\tLogChannel('CHR', \"All Skills Always Active \" + AllSkillsAlwaysActiveVersion());"
+    ]
+   },
+   {
+    "name": "reapplying a skill when its level changes",
+    "function": "protected final function AddSkillInternal(skill : ESkill, spendPoints : bool, isTemporary : bool, optional skipTutorialMessages : bool) : bool",
+    "before": [
+     "\t\t\ttheTelemetry.LogWithValueStr(TE_HERO_SKILL_UP, SkillEnumToName(skill));",
+     "\t\t}",
+     "\t\t"
+    ],
+    "remove": [],
+    "insert": [
+     "\t\tif(activeSkills.Contains(skill))",
+     "\t\t{",
+     "\t\t\tif(skills[skill].level >= 1) OnSkillUnequip(skill);",
+     "\t\t\tif(skills[skill].remainingBlockedTime <= 0 && !IsAbilityBlocked(skills[skill].abilityName))",
+     "\t\t\t\tOnSkillEquip(skill);",
+     "\t\t}",
+     "\t\t"
+    ]
+   },
+   {
+    "name": "leaving an always active skill alone when a slot is filled",
+    "function": "public final function EquipSkill(skill : ESkill, slotID : int) : bool",
+    "before": [
+     "\t\t",
+     "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
+    ],
+    "remove": [
+     "\t\tOnSkillEquip(skill);"
+    ],
+    "insert": [
+     "\t\tif(!activeSkills.Contains(skill))",
+     "\t\t{",
+     "\t\t\tOnSkillEquip(skill);",
+     "\t\t}"
+    ]
+   },
+   {
+    "name": "leaving an always active skill alone when a slot is emptied",
+    "function": "public final function UnequipSkill(slotID : int) : bool",
+    "before": [
+     "\t\tprevColor = GetSkillGroupColor(skillSlots[idx].groupID);",
+     "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
+    ],
+    "remove": [
+     "\t\tOnSkillUnequip(skill);"
+    ],
+    "insert": [
+     "\t\tif(!activeSkills.Contains(skill))",
+     "\t\t{",
+     "\t\t\tOnSkillUnequip(skill);",
+     "\t\t}"
+    ]
+   },
+   {
+    "name": "counting a learned skill as equipped",
+    "function": "public final function IsSkillEquipped(skill : ESkill) : bool",
+    "before": [
+     "\t\tvar i, idx : int;",
+     "\t\t\t\t"
+    ],
+    "remove": [],
+    "insert": [
+     "\t\tif(activeSkills.Contains(skill) && skills[skill].level > 0)",
+     "\t\t\treturn true;"
+    ]
+   },
+   {
+    "name": "clearing the always active skills on a respec",
+    "function": "public final function ResetCharacterDev()",
+    "before": [
+     "\tpublic final function ResetCharacterDev()",
+     "\t{",
+     "\t\tvar i : int;",
+     "\t\tvar skillType : ESkill;"
+    ],
+    "remove": [],
+    "insert": [
+     "\t\t",
+     "\t\tfor(i=0; i<activeSkills.Size(); i+=1)",
+     "\t\t{",
+     "\t\t\tif(skills[activeSkills[i]].level != 0) OnSkillUnequip(activeSkills[i]);",
+     "\t\t}"
+    ]
+   }
   ]
  },
  {
-  "name": "the catch up working variables",
-  "function": "public final function PostInit()",
-  "before": [
-   "\t{\t\t",
-   "\t\tvar i, playerLevel : int;"
-  ],
-  "remove": [],
-  "insert": [
-   "\t\tvar catchUpSkill : ESkill;",
-   "\t\tvar catchUpAbilityName : name;",
-   "\t\tvar catchUpIsPassive : bool;",
-   "\t\tvar orphanSkill : ESkill;",
-   "\t\tvar orphanAbilityName : name;",
-   "\t\tvar orphanIsPassive : bool;",
-   "\t\tvar k, s : int;",
-   "\t\tvar socketed : bool;"
-  ]
- },
- {
-  "name": "the always active list and the load time catch up",
-  "function": "public final function PostInit()",
-  "before": [
-   "\t\t\tmutationSkillSlotsInitialized = true;",
-   "\t\t}"
-  ],
-  "remove": [],
-  "insert": [
-   "\t\tactiveSkills.Clear();",
-   "\t\tactiveSkills.PushBack(S_Sword_s21); // Fast Attack - Muscle Memory",
-   "\t\tactiveSkills.PushBack(S_Sword_s17); // Fast Attack - Precise Blows",
-   "\t\tactiveSkills.PushBack(S_Sword_s01); // Fast Attack - Whirl",
-   "\t\tactiveSkills.PushBack(S_Sword_s05); // Fast Attack - Crippling Strikes",
-   "\t\tactiveSkills.PushBack(S_Sword_s04); // Strong Attack - Strength Training",
-   "\t\tactiveSkills.PushBack(S_Sword_s08); // Strong Attack - Crushing Blows",
-   "\t\tactiveSkills.PushBack(S_Sword_s02); // Strong Attack - Rend",
-   "\t\tactiveSkills.PushBack(S_Sword_s06); // Strong Attack - Sunder Armor",
-   "\t\tactiveSkills.PushBack(S_Sword_s10); // Defense - Arrow Deflection",
-   "\t\tactiveSkills.PushBack(S_Sword_s09); // Defense - Fleet Footed",
-   "\t\tactiveSkills.PushBack(S_Sword_s11); // Defense - Counterattack",
-   "\t\tactiveSkills.PushBack(S_Sword_s03); // Defense - Deadly Precision",
-   "\t\tactiveSkills.PushBack(S_Sword_s13); // Marksmanship - Lightning Reflexes",
-   "\t\tactiveSkills.PushBack(S_Sword_s15); // Marksmanship - Cold Blood",
-   "\t\tactiveSkills.PushBack(S_Sword_s07); // Marksmanship - Anatomical Knowledge",
-   "\t\tactiveSkills.PushBack(S_Sword_s12); // Marksmanship - Crippling Shot",
-   "\t\tactiveSkills.PushBack(S_Sword_s16); // Battle Trance - Resolve",
-   "\t\tactiveSkills.PushBack(S_Sword_s18); // Battle Trance - Undying",
-   "\t\tactiveSkills.PushBack(S_Sword_s20); // Battle Trance - Razor Focus",
-   "\t\tactiveSkills.PushBack(S_Sword_s19); // Battle Trance - Flood of Anger",
-   "\t\tactiveSkills.PushBack(S_Magic_s20); // Aard Sign - Far-Reaching Aard",
-   "\t\tactiveSkills.PushBack(S_Magic_s12); // Aard Sign - Aard Intensity",
-   "\t\tactiveSkills.PushBack(S_Magic_s06); // Aard Sign - Shock Wave",
-   "\t\tactiveSkills.PushBack(S_Magic_s08); // Igni Sign - Melt Armor",
-   "\t\tactiveSkills.PushBack(S_Magic_s07); // Igni Sign - Igni Intensity",
-   "\t\tactiveSkills.PushBack(S_Magic_s09); // Igni Sign - Pyromaniac",
-   "\t\tactiveSkills.PushBack(S_Magic_s10); // Yrden Sign - Sustained Glyphs",
-   "\t\tactiveSkills.PushBack(S_Magic_s16); // Yrden Sign - Yrden Intensity",
-   "\t\tactiveSkills.PushBack(S_Magic_s11); // Yrden Sign - Supercharged Glyphs",
-   "\t\tactiveSkills.PushBack(S_Magic_s13); // Quen Sign - Exploding Shield",
-   "\t\tactiveSkills.PushBack(S_Magic_s15); // Quen Sign - Quen Intensity",
-   "\t\tactiveSkills.PushBack(S_Magic_s14); // Quen Sign - Quen Discharge",
-   "\t\tactiveSkills.PushBack(S_Magic_s17); // Axii Sign - Delusion",
-   "\t\tactiveSkills.PushBack(S_Magic_s18); // Axii Sign - Axii Intensity",
-   "\t\tactiveSkills.PushBack(S_Magic_s19); // Axii Sign - Domination",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s01); // Brewing - Heightened Tolerance",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s02); // Brewing - Refreshment",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s03); // Brewing - Delayed Recovery",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s04); // Brewing - Side Effects",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s12); // Oil Preparation - Poisoned Blades",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s05); // Oil Preparation - Protective Coating",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s06); // Oil Preparation - Fixative",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s07); // Oil Preparation - Hunter Instinct",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s09); // Bomb Creation - Steady Aim",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s10); // Bomb Creation - Pyrotechnics",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s08); // Bomb Creation - Efficiency",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s11); // Bomb Creation - Cluster Bombs",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s18); // Mutation - Acquired Tolerance",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s13); // Mutation - Tissue Transmutation",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s19); // Mutation - Synergy",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s14); // Mutation - Adaptation",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s16); // Trial of the Grasses - Frenzy",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s20); // Trial of the Grasses - Endure Pain",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s15); // Trial of the Grasses - Fast Metabolism",
-   "\t\tactiveSkills.PushBack(S_Alchemy_s17); // Trial of the Grasses - Killing Spree",
-   "\t\tactiveSkills.PushBack(S_Perk_01); // General - Sun and Stars",
-   "\t\tactiveSkills.PushBack(S_Perk_02); // General - Steady Shot",
-   "\t\tactiveSkills.PushBack(S_Perk_13); // General - Metabolism Boosts",
-   "\t\tactiveSkills.PushBack(S_Perk_04); // General - Survival Instinct",
-   "\t\tactiveSkills.PushBack(S_Perk_09); // General - Rage Management",
-   "\t\tactiveSkills.PushBack(S_Perk_17); // General - Trick Shot",
-   "\t\tactiveSkills.PushBack(S_Perk_15); // General - Gourmet",
-   "\t\tactiveSkills.PushBack(S_Perk_05); // General - Cat School Techniques",
-   "\t\tactiveSkills.PushBack(S_Perk_11); // General - Focus",
-   "\t\tactiveSkills.PushBack(S_Perk_18); // General - Advanced Pyrotechnics",
-   "\t\tactiveSkills.PushBack(S_Perk_16); // General - In Combat's Fires",
-   "\t\tactiveSkills.PushBack(S_Perk_06); // General - Griffin School Techniques",
-   "\t\tactiveSkills.PushBack(S_Perk_10); // General - Adrenaline Burst",
-   "\t\tactiveSkills.PushBack(S_Perk_20); // General - Heavy Artillery",
-   "\t\tactiveSkills.PushBack(S_Perk_07); // General - Bear School Techniques",
-   "\t\tactiveSkills.PushBack(S_Perk_12); // General - Metabolic Control",
-   "\t\tactiveSkills.PushBack(S_Perk_22); // General - Strong Back",
-   "\t\tactiveSkills.PushBack(S_Perk_21); // General - Attack is the Best Defense",
-   "\t\t",
-   "\t\tif( (W3PlayerWitcher)owner )",
-   "\t\t{",
-   "\t\t\tfor(i=0; i<activeSkills.Size(); i+=1)",
-   "\t\t\t{",
-   "\t\t\t\tcatchUpSkill = activeSkills[i];",
-   "\t\t\t\t",
-   "\t\t\t\tif(skills[catchUpSkill].level <= 0)",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tif(GetSkillSlotID(catchUpSkill) > 0)",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tif(skills[catchUpSkill].remainingBlockedTime > 0 || IsAbilityBlocked(skills[catchUpSkill].abilityName))",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tcatchUpAbilityName = skills[catchUpSkill].abilityName;",
-   "\t\t\t\tcatchUpIsPassive = theGame.GetDefinitionsManager().AbilityHasTag(catchUpAbilityName, theGame.params.SKILL_GLOBAL_PASSIVE_TAG);",
-   "\t\t\t\t",
-   "\t\t\t\tif( (catchUpIsPassive && charStats.HasAbility(catchUpAbilityName)) || (!catchUpIsPassive && skillAbilities.Contains(catchUpAbilityName)) )",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tOnSkillEquip(catchUpSkill);",
-   "\t\t\t}",
-   "\t\t\t",
-   "\t\t\tfor(k=0; k<skills.Size(); k+=1)",
-   "\t\t\t{",
-   "\t\t\t\torphanSkill = skills[k].skillType;",
-   "\t\t\t\t",
-   "\t\t\t\tif(orphanSkill == S_SUndefined || IsCoreSkill(orphanSkill))",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tif(skills[k].level <= 0)",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tif(activeSkills.Contains(orphanSkill))",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\tsocketed = false;",
-   "\t\t\t\tfor(s=0; s<skillSlots.Size(); s+=1)",
-   "\t\t\t\t{",
-   "\t\t\t\t\tif(skillSlots[s].socketedSkill == orphanSkill)",
-   "\t\t\t\t\t{",
-   "\t\t\t\t\t\tsocketed = true;",
-   "\t\t\t\t\t\tbreak;",
-   "\t\t\t\t\t}",
-   "\t\t\t\t}",
-   "\t\t\t\tif(socketed)",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\t",
-   "\t\t\t\torphanAbilityName = skills[k].abilityName;",
-   "\t\t\t\tif(!IsNameValid(orphanAbilityName))",
-   "\t\t\t\t\tcontinue;",
-   "\t\t\t\torphanIsPassive = theGame.GetDefinitionsManager().AbilityHasTag(orphanAbilityName, theGame.params.SKILL_GLOBAL_PASSIVE_TAG);",
-   "\t\t\t\t",
-   "\t\t\t\tif( (orphanIsPassive && charStats.HasAbility(orphanAbilityName)) || (!orphanIsPassive && skillAbilities.Contains(orphanAbilityName)) )",
-   "\t\t\t\t{",
-   "\t\t\t\t\tOnSkillUnequip(orphanSkill);",
-   "\t\t\t\t}",
-   "\t\t\t}",
-   "\t\t}",
-   "\t\tLogChannel('CHR', \"All Skills Always Active \" + AllSkillsAlwaysActiveVersion());"
-  ]
- },
- {
-  "name": "reapplying a skill when its level changes",
-  "function": "protected final function AddSkillInternal(skill : ESkill, spendPoints : bool, isTemporary : bool, optional skipTutorialMessages : bool) : bool",
-  "before": [
-   "\t\t\ttheTelemetry.LogWithValueStr(TE_HERO_SKILL_UP, SkillEnumToName(skill));",
-   "\t\t}",
-   "\t\t"
-  ],
-  "remove": [],
-  "insert": [
-   "\t\tif(activeSkills.Contains(skill))",
-   "\t\t{",
-   "\t\t\tif(skills[skill].level >= 1) OnSkillUnequip(skill);",
-   "\t\t\tif(skills[skill].remainingBlockedTime <= 0 && !IsAbilityBlocked(skills[skill].abilityName))",
-   "\t\t\t\tOnSkillEquip(skill);",
-   "\t\t}",
-   "\t\t"
-  ]
- },
- {
-  "name": "leaving an always active skill alone when a slot is filled",
-  "function": "public final function EquipSkill(skill : ESkill, slotID : int) : bool",
-  "before": [
-   "\t\t",
-   "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
-  ],
-  "remove": [
-   "\t\tOnSkillEquip(skill);"
-  ],
-  "insert": [
-   "\t\tif(!activeSkills.Contains(skill))",
-   "\t\t{",
-   "\t\t\tOnSkillEquip(skill);",
-   "\t\t}"
-  ]
- },
- {
-  "name": "leaving an always active skill alone when a slot is emptied",
-  "function": "public final function UnequipSkill(slotID : int) : bool",
-  "before": [
-   "\t\tprevColor = GetSkillGroupColor(skillSlots[idx].groupID);",
-   "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
-  ],
-  "remove": [
-   "\t\tOnSkillUnequip(skill);"
-  ],
-  "insert": [
-   "\t\tif(!activeSkills.Contains(skill))",
-   "\t\t{",
-   "\t\t\tOnSkillUnequip(skill);",
-   "\t\t}"
-  ]
- },
- {
-  "name": "counting a learned skill as equipped",
-  "function": "public final function IsSkillEquipped(skill : ESkill) : bool",
-  "before": [
-   "\t\tvar i, idx : int;",
-   "\t\t\t\t"
-  ],
-  "remove": [],
-  "insert": [
-   "\t\tif(activeSkills.Contains(skill) && skills[skill].level > 0)",
-   "\t\t\treturn true;"
-  ]
- },
- {
-  "name": "clearing the always active skills on a respec",
-  "function": "public final function ResetCharacterDev()",
-  "before": [
-   "\tpublic final function ResetCharacterDev()",
-   "\t{",
-   "\t\tvar i : int;",
-   "\t\tvar skillType : ESkill;"
-  ],
-  "remove": [],
-  "insert": [
-   "\t\t",
-   "\t\tfor(i=0; i<activeSkills.Size(); i+=1)",
-   "\t\t{",
-   "\t\t\tif(skills[activeSkills[i]].level != 0) OnSkillUnequip(activeSkills[i]);",
-   "\t\t}"
+  "file": "content/scripts/game/player/playerWitcher.ws",
+  "base": "game/player/playerWitcher.ws",
+  "edits": [
+   {
+    "name": "counting every researched mutation as active",
+    "function": "public final function IsMutationActive( mutationType : EPlayerMutationType) : bool",
+    "before": [
+     "\t\tvar sword : SItemUniqueId;",
+     "\t\t"
+    ],
+    "remove": [
+     "\t\tif( GetEquippedMutationType() != mutationType )"
+    ],
+    "insert": [
+     "\t\tif( !IsMutationResearched( mutationType ) )"
+    ]
+   }
   ]
  }
 ]

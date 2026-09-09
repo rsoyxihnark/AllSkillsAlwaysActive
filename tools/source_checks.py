@@ -174,17 +174,7 @@ def main(argv):
     elif 'activeSkills.Contains' not in equipped.group(1):
         wrong.append('IsSkillEquipped no longer consults the always-active list, so no skill would work without a slot')
 
-    modded = graft.read_ws(SCRIPT)
-    base, undescribed = graft.strip(modded, graft.load_edits())
-    if undescribed:
-        wrong.extend(undescribed)
-        wrong.append('tools/edits.json no longer describes the script, so the mod could not be rebuilt '
-                     'onto a fresh base; update it in the same commit as the change')
-    else:
-        rebuilt, missed = graft.apply(base, graft.load_edits())
-        wrong.extend(missed)
-        if not missed and rebuilt != modded:
-            wrong.append('grafting the edits back onto the base does not reproduce the script they came from')
+    wrong.extend(graft.check())
 
     sections = changelog_sections(io.open(CHANGELOG, encoding='utf-8').read())
     if not sections:

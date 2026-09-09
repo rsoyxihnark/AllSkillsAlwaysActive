@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Every mutation you have researched is now active at once, rather than only the one you have equipped in the mutations panel.
+- The mod now changes playerWitcher.ws as well as playerAbilityManager.ws, so run Script Merger if another mod you use touches that file.
+
 ## 1.1.1
 
 - Internal comment tidy up.

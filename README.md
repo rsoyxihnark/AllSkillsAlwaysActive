@@ -2,6 +2,7 @@
 
 ✅Every skill you learn works immediately without equipping.
 ✅It works on a fresh game or mid-playthrough save.
+✅Every mutation you research stays active, all of them at once, not just the one in the slot.
 ❌No skill slot needed.
 ❌No reset & re-learning ability points with Potion of Clearance needed.
 
@@ -13,6 +14,7 @@ INSTALLATION
 HOW TO CHECK IT IS WORKING
 - Learn Strong Back without socketing it: your carry weight rises immediately.
 - Learn Acquired Tolerance: your maximum toxicity climbs with every alchemy formula you know.
+- Research a second mutation: the first one keeps working, and the mutations panel still shows whichever you slotted.
 
 UNINSTALLATION
 1. Drink a Potion of Clearance, then save and quit. Debug console command below:

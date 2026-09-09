@@ -3,8 +3,7 @@ import io, json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 EDITS = os.path.join(HERE, 'edits.json')
-SCRIPT = os.path.join(ROOT, 'modAllSkillsAlwaysActive', 'content', 'scripts',
-                      'game', 'gameplay', 'ability', 'playerAbilityManager.ws')
+MOD = os.path.join(ROOT, 'modAllSkillsAlwaysActive')
 
 
 def read_ws(path):
@@ -15,6 +14,9 @@ def read_ws(path):
 
 
 def write_ws(path, lines):
+    folder = os.path.dirname(path)
+    if folder and not os.path.isdir(folder):
+        os.makedirs(folder)
     io.open(path, 'wb').write(b'\xff\xfe' + '\r\n'.join(lines).encode('utf-16-le'))
 
 
@@ -51,65 +53,82 @@ def strip(modded, edits):
     return swap(modded, edits, 'insert', 'remove')
 
 
-def verify():
-    edits = load_edits()
-    modded = read_ws(SCRIPT)
-    base, wrong = strip(modded, edits)
-    if wrong:
-        for line in wrong:
-            sys.stderr.write(line + '\n')
-        sys.stderr.write('tools/edits.json no longer describes the script; update it in the same commit as the change\n')
-        return 1
-    rebuilt, missed = apply(base, edits)
-    if missed:
-        for line in missed:
-            sys.stderr.write(line + '\n')
-        return 1
-    if rebuilt != modded:
-        sys.stderr.write('grafting the edits back on does not reproduce the script they came from\n')
-        return 1
-    sys.stdout.write('the edit set turns a ' + str(len(base)) + ' line base into the shipped script exactly, '
-                     'across ' + str(len(edits)) + ' edits\n')
-    return 0
+def check():
+    wrong = []
+    for entry in load_edits():
+        shipped = os.path.join(MOD, entry['file'])
+        if not os.path.isfile(shipped):
+            wrong.append(entry['file'] + ' is described by tools/edits.json but the mod does not ship it')
+            continue
+        modded = read_ws(shipped)
+        base, undescribed = strip(modded, entry['edits'])
+        if undescribed:
+            wrong.extend(entry['file'] + ': ' + line for line in undescribed)
+            wrong.append('tools/edits.json no longer describes ' + entry['file'] +
+                         '; update it in the same commit as the change')
+            continue
+        rebuilt, missed = apply(base, entry['edits'])
+        wrong.extend(entry['file'] + ': ' + line for line in missed)
+        if not missed and rebuilt != modded:
+            wrong.append('grafting the edits onto the base does not reproduce ' + entry['file'])
+    return wrong
 
 
 def main(argv):
     rest = [a for a in argv[1:] if not a.startswith('--')]
+    entries = load_edits()
 
     if '--vanilla' in argv:
         if len(rest) != 1:
-            sys.stderr.write('name one file to write the base to\n')
+            sys.stderr.write('name the folder to write the base scripts into\n')
             return 1
-        base, wrong = strip(read_ws(SCRIPT), load_edits())
-        if wrong:
-            for line in wrong:
-                sys.stderr.write(line + '\n')
-            return 1
-        write_ws(rest[0], base)
-        sys.stdout.write('wrote a ' + str(len(base)) + ' line base to ' + rest[0] + '\n')
+        for entry in entries:
+            base, wrong = strip(read_ws(os.path.join(MOD, entry['file'])), entry['edits'])
+            if wrong:
+                for line in wrong:
+                    sys.stderr.write(entry['file'] + ': ' + line + '\n')
+                return 1
+            write_ws(os.path.join(rest[0], entry['base']), base)
+            sys.stdout.write('wrote a ' + str(len(base)) + ' line base to ' +
+                             os.path.join(rest[0], entry['base']) + '\n')
         return 0
 
     if '--apply' in argv:
         if len(rest) != 2:
-            sys.stderr.write('name the base script to graft onto and the file to write\n')
+            sys.stderr.write('name the folder of base scripts to graft onto and the folder to write\n')
             return 1
-        edits = load_edits()
-        grafted, missed = apply(read_ws(rest[0]), edits)
-        for line in missed:
-            sys.stderr.write(line + '\n')
-        if missed:
-            sys.stderr.write(str(len(missed)) + ' of ' + str(len(edits)) +
-                             ' edits could not be placed; the base has moved and they need reseating by hand\n')
-            return 1
-        write_ws(rest[1], grafted)
-        sys.stdout.write('grafted ' + str(len(edits)) + ' edits onto ' + rest[0] +
-                         ' and wrote ' + rest[1] + '\n')
-        return 0
+        failed = False
+        for entry in entries:
+            source = os.path.join(rest[0], entry['base'])
+            if not os.path.isfile(source):
+                sys.stderr.write(entry['base'] + ' is not in ' + rest[0] + '\n')
+                failed = True
+                continue
+            grafted, missed = apply(read_ws(source), entry['edits'])
+            for line in missed:
+                sys.stderr.write(entry['file'] + ': ' + line + '\n')
+            if missed:
+                sys.stderr.write(str(len(missed)) + ' of ' + str(len(entry['edits'])) +
+                                 ' edits could not be placed in ' + entry['file'] +
+                                 '; the base has moved and they need reseating by hand\n')
+                failed = True
+                continue
+            write_ws(os.path.join(rest[1], entry['file']), grafted)
+            sys.stdout.write('grafted ' + str(len(entry['edits'])) + ' edits into ' + entry['file'] + '\n')
+        return 1 if failed else 0
 
     if '--verify' in argv or len(argv) == 1:
-        return verify()
+        wrong = check()
+        for line in wrong:
+            sys.stderr.write(line + '\n')
+        if wrong:
+            return 1
+        total = sum(len(e['edits']) for e in entries)
+        sys.stdout.write('the edit set rebuilds ' + str(len(entries)) + ' shipped scripts exactly, across ' +
+                         str(total) + ' edits\n')
+        return 0
 
-    sys.stderr.write('usage: graft.py [--verify] | --vanilla OUT | --apply BASE OUT\n')
+    sys.stderr.write('usage: graft.py [--verify] | --vanilla OUTDIR | --apply BASEDIR OUTDIR\n')
     return 1
 
 
