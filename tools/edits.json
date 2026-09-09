@@ -6,7 +6,8 @@
    "\tprivate   saved var mutationSkillSlotsInitialized : bool;\t\t\t\t\t",
    "\t"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
    "\tprivate \t\tvar activeSkills : array<ESkill>;\t\t\t\t\t\t\t\t"
   ]
  },
@@ -17,7 +18,8 @@
    "\t{\t\t",
    "\t\tvar i, playerLevel : int;"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
    "\t\tvar catchUpSkill : ESkill;",
    "\t\tvar catchUpAbilityName : name;",
    "\t\tvar catchUpIsPassive : bool;",
@@ -35,7 +37,8 @@
    "\t\t\tmutationSkillSlotsInitialized = true;",
    "\t\t}"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
    "\t\tactiveSkills.Clear();",
    "\t\tactiveSkills.PushBack(S_Sword_s21); // Fast Attack - Muscle Memory",
    "\t\tactiveSkills.PushBack(S_Sword_s17); // Fast Attack - Precise Blows",
@@ -182,23 +185,28 @@
    "\t\t}",
    "\t\t"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
    "\t\tif(activeSkills.Contains(skill))",
    "\t\t{",
    "\t\t\tif(skills[skill].level >= 1) OnSkillUnequip(skill);",
    "\t\t\tif(skills[skill].remainingBlockedTime <= 0 && !IsAbilityBlocked(skills[skill].abilityName))",
    "\t\t\t\tOnSkillEquip(skill);",
-   "\t\t}"
+   "\t\t}",
+   "\t\t"
   ]
  },
  {
-  "name": "leaving a socketed skill alone on equip",
+  "name": "leaving an always active skill alone when a slot is filled",
   "function": "public final function EquipSkill(skill : ESkill, slotID : int) : bool",
   "before": [
    "\t\t",
    "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
   ],
-  "body": [
+  "remove": [
+   "\t\tOnSkillEquip(skill);"
+  ],
+  "insert": [
    "\t\tif(!activeSkills.Contains(skill))",
    "\t\t{",
    "\t\t\tOnSkillEquip(skill);",
@@ -206,13 +214,16 @@
   ]
  },
  {
-  "name": "leaving a socketed skill alone on unequip",
+  "name": "leaving an always active skill alone when a slot is emptied",
   "function": "public final function UnequipSkill(slotID : int) : bool",
   "before": [
    "\t\tprevColor = GetSkillGroupColor(skillSlots[idx].groupID);",
    "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
   ],
-  "body": [
+  "remove": [
+   "\t\tOnSkillUnequip(skill);"
+  ],
+  "insert": [
    "\t\tif(!activeSkills.Contains(skill))",
    "\t\t{",
    "\t\t\tOnSkillUnequip(skill);",
@@ -226,7 +237,8 @@
    "\t\tvar i, idx : int;",
    "\t\t\t\t"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
    "\t\tif(activeSkills.Contains(skill) && skills[skill].level > 0)",
    "\t\t\treturn true;"
   ]
@@ -235,10 +247,14 @@
   "name": "clearing the always active skills on a respec",
   "function": "public final function ResetCharacterDev()",
   "before": [
-   "\t\tvar skillType : ESkill;",
-   "\t\t"
+   "\tpublic final function ResetCharacterDev()",
+   "\t{",
+   "\t\tvar i : int;",
+   "\t\tvar skillType : ESkill;"
   ],
-  "body": [
+  "remove": [],
+  "insert": [
+   "\t\t",
    "\t\tfor(i=0; i<activeSkills.Size(); i+=1)",
    "\t\t{",
    "\t\t\tif(skills[activeSkills[i]].level != 0) OnSkillUnequip(activeSkills[i]);",
