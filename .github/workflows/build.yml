@@ -1,0 +1,172 @@
+name: Build All Skills Always Active
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag override (leave empty to release the version the mod declares)"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Changelog gate
+        shell: bash
+        run: |
+          CHANGED=$(git diff --name-only "$GITHUB_SHA^" "$GITHUB_SHA" 2>/dev/null || git show --pretty=format: --name-only "$GITHUB_SHA")
+          CHANGED=$(printf '%s\n' "$CHANGED" | sed '/^$/d')
+          if [ -z "$CHANGED" ]; then
+            echo "this commit changes no file at all"
+            exit 1
+          fi
+          if printf '%s\n' "$CHANGED" | grep -qx 'CHANGELOG.md'; then
+            echo "the changelog carries this commit's entries"
+            exit 0
+          fi
+          OUTSIDE=$(printf '%s\n' "$CHANGED" | grep -Ev '^(tools/|\.github/|\.claude/|\.gitignore$|CLAUDE\.md$)' || true)
+          if [ -z "$OUTSIDE" ]; then
+            echo "this commit touches only the project's own checks, workflow and working rules, so it writes no changelog entry"
+            exit 0
+          fi
+          SUBJECT=$(git log -1 --format=%s "$GITHUB_SHA")
+          case "$SUBJECT" in
+            "[no release]"*) ;;
+            *)
+              echo "this commit changes what a user gets and leaves CHANGELOG.md untouched:"
+              printf '  %s\n' $OUTSIDE
+              exit 1 ;;
+          esac
+          if printf '%s\n' "$CHANGED" | grep -qx 'modAllSkillsAlwaysActive/content/scripts/local/allSkillsAlwaysActive.ws'; then
+            echo "a [no release] commit may not ship a version, and this one changes the file the version lives in"
+            exit 1
+          fi
+          echo "this commit is marked [no release] and ships no version, so it writes no changelog entry:"
+          printf '  %s\n' $OUTSIDE
+
+      - name: Shape gate
+        shell: bash
+        run: |
+          SUBJECT=$(git log -1 --format=%s "$GITHUB_SHA")
+          case "$SUBJECT" in
+            "[no release]"*)
+              echo "this commit ships no version, so it may move the source about freely"
+              exit 0 ;;
+          esac
+          GONE=$(git diff --name-only --diff-filter=D "$GITHUB_SHA^" "$GITHUB_SHA" -- modAllSkillsAlwaysActive 2>/dev/null || true)
+          GONE=$(printf '%s\n' "$GONE" | sed '/^$/d')
+          if [ -n "$GONE" ]; then
+            echo "this commit ships a version and takes a mod file away:"
+            printf '  %s\n' $GONE
+            echo
+            echo "a file that leaves the mod gives a player nothing to read, so the release notes"
+            echo "cannot describe it. Ship the move on its own as [no release], then ship the"
+            echo "version on top of it."
+            exit 1
+          fi
+          echo "this commit ships a version and takes no mod file away"
+
+      - name: Resolve the version the mod declares
+        id: ver
+        shell: bash
+        run: |
+          MODVER=$(python3 tools/source_checks.py --version)
+          if [ -z "$MODVER" ]; then
+            echo "no version found in the mod"
+            exit 1
+          fi
+          INPUT="${{ github.event.inputs.version }}"
+          if [ -n "$INPUT" ] && [ "$INPUT" != "v$MODVER" ] && [ "$INPUT" != "$MODVER" ]; then
+            echo "requested $INPUT but the mod declares $MODVER - bump the mod first"
+            exit 1
+          fi
+          echo "version=v$MODVER" >> "$GITHUB_OUTPUT"
+
+      - name: Source checks
+        shell: bash
+        run: python3 tools/source_checks.py
+
+      - name: Assemble the mod folder
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp -r modAllSkillsAlwaysActive dist/modAllSkillsAlwaysActive
+          cp README.md dist/modAllSkillsAlwaysActive/README.md
+
+      - name: Zip the mod
+        shell: bash
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          cd dist && zip -r -q "ModAllSkillsAlwaysActive-$VERSION.zip" modAllSkillsAlwaysActive
+
+      - name: Upload the built mod
+        uses: actions/upload-artifact@v7
+        with:
+          name: ModAllSkillsAlwaysActive
+          path: dist/*.zip
+
+      - name: Publish release
+        if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          if gh release view "$VERSION" --json tagName -q .tagName >/dev/null 2>&1; then
+            draft=$(gh release view "$VERSION" --json isDraft -q .isDraft 2>/dev/null || echo false)
+            if [ "$draft" = "true" ]; then
+              echo "$VERSION exists only as a draft left by a timed-out attempt - discarding it and publishing cleanly"
+              gh release delete "$VERSION" --yes
+            elif [ "${{ github.event_name }}" = "push" ]; then
+              echo "release $VERSION is already published - nothing to publish for this push"
+              exit 0
+            else
+              echo "release $VERSION is already published - bump the version in the mod instead of replacing history"
+              exit 1
+            fi
+          fi
+          if grep -qiE '^##[[:space:]]+Unreleased' CHANGELOG.md; then
+            echo "CHANGELOG.md still carries an Unreleased heading - rename it to ${VERSION#v} before this version is published"
+            exit 1
+          fi
+          if ! grep -qE "^##[[:space:]]+${VERSION#v}([[:space:]]|$)" CHANGELOG.md; then
+            echo "CHANGELOG.md carries no section for ${VERSION#v} - open one before this version is published"
+            exit 1
+          fi
+          if ! python3 tools/nexus_changelog.py --notes "${VERSION#v}" > release-notes.md; then
+            echo "the notes for ${VERSION#v} could not be read out of CHANGELOG.md - its section is the release notes, so write one"
+            exit 1
+          fi
+          if [ -z "$(tr -d '[:space:]' < release-notes.md)" ]; then
+            echo "release notes came out empty - the changelog section for ${VERSION#v} is the notes, so write one"
+            exit 1
+          fi
+          for attempt in 1 2 3 4 5; do
+            if gh release create "$VERSION" "dist/ModAllSkillsAlwaysActive-$VERSION.zip" \
+                 --target "$GITHUB_SHA" \
+                 --title "All Skills Always Active ${VERSION#v}" \
+                 --notes-file release-notes.md; then
+              echo "published $VERSION on attempt $attempt"
+              exit 0
+            fi
+            if gh release view "$VERSION" --json tagName -q .tagName >/dev/null 2>&1; then
+              if [ "$(gh release view "$VERSION" --json isDraft -q .isDraft 2>/dev/null || echo false)" = "true" ]; then
+                echo "attempt $attempt stranded a draft - discarding it before trying again"
+                gh release delete "$VERSION" --yes
+              else
+                echo "$VERSION is published after a failed attempt - the request landed despite the error"
+                exit 0
+              fi
+            fi
+            echo "publish attempt $attempt failed"
+            if [ "$attempt" -lt 5 ]; then sleep $((attempt * 15)); fi
+          done
+          echo "could not publish $VERSION after 5 attempts - the mod zip is still on the run as an artifact"
+          exit 1

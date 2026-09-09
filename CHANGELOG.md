@@ -1,0 +1,8 @@
+# Changelog
+
+## 1.1.0
+
+- Every skill you have already learned switches itself on the first time you load a save, so a playthrough already under way needs no Potion of Clearance.
+- A learned skill that is neither always active nor socketed now has its bonus taken back off as you load, so nothing lingers after you come across from another always-active mod.
+- A skill the game blocks for a quest stays blocked, and comes back on by itself once the block lifts.
+- The game log now names the version of All Skills Always Active you are running.
