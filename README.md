@@ -32,6 +32,18 @@ A: Not a bug. Firestream is one of the Seven skills that still require a slot, o
 6- Gorged on Power
 7- Battle Frenzy
 
+- TURNING A SKILL OFF -
+Q: Heavy Artillery halves my bombs, Fast Metabolism fights my Metamorphosis build. Can I switch one off without a Potion of Clearance?
+A: Yes, and it is the game's own command, nothing to install. Open the debug console and type:
+skillblock(S_Perk_20, true)
+That skill stops applying and stays off, through saves and reloads, until you turn it back on the same way:
+skillblock(S_Perk_20, false)
+You keep the skill and you keep the points you spent, it just stops doing anything. The three people ask about most:
+S_Perk_20 - Heavy Artillery
+S_Alchemy_s15 - Fast Metabolism
+S_Alchemy_s03 - Delayed Recovery
+Want a different one? Type logskills() in the console and it prints every skill's name.
+
 -MUTAGENS AND MUTATIONS-  TLDR; MUTAGENS UNTOUCHED, ALL YOUR MUTATIONS RUN AT ONCE.
 
 Mutagens work exactly as in vanilla, untouched. Mutations got better in 1.2.0: all of them run at once now. Neither needs an external tool.
