@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- A change to the description can no longer ship without the changelog saying what changed in it.
+
 ## 1.2.0
 
 - Every mutation you have researched is now active at once, rather than only the one you have equipped in the mutations panel.
