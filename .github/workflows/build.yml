@@ -108,6 +108,8 @@ jobs:
           mkdir -p dist
           cp -r modAllSkillsAlwaysActive dist/modAllSkillsAlwaysActive
           cp README.md dist/modAllSkillsAlwaysActive/README.md
+          cp CHANGELOG.md dist/modAllSkillsAlwaysActive/CHANGELOG.md
+          cp COMPARISON.md dist/modAllSkillsAlwaysActive/COMPARISON.md
 
       - name: Zip the mod
         shell: bash
