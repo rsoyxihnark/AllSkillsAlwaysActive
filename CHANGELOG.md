@@ -3,12 +3,15 @@
 ## Unreleased
 
 - A change to the description can no longer ship without the changelog saying what changed in it.
+- A written comparison against the similar mods examined is now kept alongside the mod.
 
 ## 1.2.0
 
 - Every mutation you have researched is now active at once, rather than only the one you have equipped in the mutations panel.
 - Every mutation that does something the moment a fight starts now does it, instead of only the first one taking effect.
 - The mod now changes playerWitcher.ws as well as playerAbilityManager.ws, so run Script Merger if another mod you use touches that file.
+- The changes this mod makes to the game's own scripts are now kept as a recorded set, so it can be rebuilt onto a newer version of those scripts instead of being redone by hand.
+- That recorded set is now checked against the game's untouched scripts, so a rebuild reproduces the mod exactly rather than doubling up a line.
 
 ## 1.1.1
 
