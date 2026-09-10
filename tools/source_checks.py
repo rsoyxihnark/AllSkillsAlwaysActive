@@ -11,6 +11,7 @@ CHANGELOG = 'CHANGELOG.md'
 VERSION_FUNCTION = 'AllSkillsAlwaysActiveVersion'
 AUTO_ACTIVE_COUNT = 73
 DASHES = '\u2013\u2014\u2012\u2015'
+SKIP_DIRS = ('.git', 'dist', '__pycache__')
 
 SLOT_ONLY = [
     ('S_Magic_s01', 'Sweep'),
@@ -83,9 +84,9 @@ def declared_version(code):
 
 def text_files():
     for root, dirs, names in os.walk('.'):
-        dirs[:] = [d for d in dirs if d != '.git']
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for name in sorted(names):
-            path = os.path.join(root, name)
+            path = os.path.relpath(os.path.join(root, name), '.').replace(os.sep, '/')
             if path.endswith('.ws'):
                 yield path, read_utf16(path)
                 continue
@@ -113,11 +114,8 @@ def changelog_sections(text):
 
 
 def main(argv):
-    script = read_utf16(SCRIPT)
     version_source = read_utf16(VERSION_FILE)
-    code = strip_comments(script)
-    version_code = strip_comments(version_source)
-    version = declared_version(version_code)
+    version = declared_version(strip_comments(version_source))
 
     if '--version' in argv:
         if not version:
@@ -126,6 +124,8 @@ def main(argv):
         sys.stdout.write(version + '\n')
         return 0
 
+    script = read_utf16(SCRIPT)
+    code = strip_comments(script)
     wrong = []
 
     for path, text in [(SCRIPT, script), (VERSION_FILE, version_source)]:
@@ -135,14 +135,13 @@ def main(argv):
 
     if not version:
         wrong.append(VERSION_FILE + ' declares no version through ' + VERSION_FUNCTION)
-    elif not re.match(r'^\d+\.\d+\.\d+$', version):
-        wrong.append('the version ' + version + ' is not three numbers separated by full stops')
-
-    elsewhere = [p for p, t in text_files()
-                 if os.path.relpath(p, '.').replace(os.sep, '/') != VERSION_FILE
-                 and re.search(r'"' + re.escape(version) + r'"', t)]
-    if elsewhere:
-        wrong.append('the version is written into the source in more than one place: ' + ', '.join(elsewhere))
+    else:
+        if not re.match(r'^\d+\.\d+\.\d+$', version):
+            wrong.append('the version ' + version + ' is not three numbers separated by full stops')
+        elsewhere = [p for p, t in text_files()
+                     if p != VERSION_FILE and re.search(r'"' + re.escape(version) + r'"', t)]
+        if elsewhere:
+            wrong.append('the version is written into the source in more than one place: ' + ', '.join(elsewhere))
 
     if VERSION_FUNCTION + '()' not in code:
         wrong.append(SCRIPT + ' never reads the version back, so the game log cannot say which version is loaded')
