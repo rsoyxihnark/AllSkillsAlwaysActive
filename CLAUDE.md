@@ -105,12 +105,24 @@ The release workflow publishes the commit body as the release notes, so a commit
 - When the project targets a platform this session is not running on, say so in chat, verify everything the session can verify, and treat the release workflow as the gate that has to come back green.
 - Never commit build output, packaged binaries, third-party libraries or dependency archives to this repository. The workflow installs dependencies from their package index and produces the downloadable file itself.
 
+## Working from a base the project did not write
+
+Where the project ships a modified copy of a file someone else wrote, a game script, a vendored source, the edits are the project and the copy around them is not.
+
+- Derive the edit set by comparing the shipped copy against the untouched original, never by reading markers or comments inside the shipped copy. A marker says where someone once edited. It does not say what the edit was, and it cannot tell a line that was inserted from a line that replaced another. Getting that wrong produces a description that rebuilds fine and ships a duplicated call.
+- A round trip that starts and ends at the shipped copy proves the description is self consistent, not that it is correct. Correctness needs the untouched original on one side of the comparison, so get the original before shipping rather than after.
+- Before shipping a modified copy of someone else's file, prove it is the owner's own file plus the intended difference and nothing else. Ask him for the file if that is the only way to get it. A copy pulled from a mirror can be a different patch of the same thing, and the reverted fixes are invisible until a user reports something unrelated breaking.
+- Anchor an edit on its enclosing function as well as on its line. Near identical sibling functions are common in a large file, and a line that looks unique is often the third copy of itself.
+- Where a change makes a condition true far more often than the original ever expected, search every place that condition is read for `else if` chains and early returns written while it was rare. Nothing will flag them, they still compile, and the behaviour goes quietly missing.
+
 ## Verification
 
 - Prove a breach of these rules before you report it and before you fix it, with something that reads the file properly rather than a search that guesses: a tokenizer for comments, code points for dashes. Everything in the Never section licenses an edit the owner did not ask for, so a wrong finding costs him either an unwanted change or a decision made on a false premise.
 - A check that errored is not a check that passed. A search that failed to run returns nothing, which looks exactly like a clean repository. Make it run, then believe it.
 - A check that fails because the source moved is rewritten to describe where the source moved to, never loosened until it passes. Where a rule counts something and the count changed for a good reason, change the count and leave the rule saying what it said. Cutting out the part that failed is how a repository ends up with checks that prove nothing.
 - A run that looks stuck is usually a clock you misread. Before you call one hung, or cancel it and start it again, read the time off the machine you are on and work out how long it has really been. Wait for the thing that says the work is finished, the published release or the job's own conclusion, rather than a status view that lags behind it.
+- Read what is staged before committing, not only what was edited. A tool's own by-products, an interpreter cache, a build directory, get swept in by a broad add, and one staged once stays in the history.
+- Taking something out of the working tree does not take it out of the history. Where the point of a change is that something is gone, say plainly that the old commits still carry it, rather than calling the repository clean.
 - Say plainly what this session could not verify. Name the thing, say why it was out of reach, and leave it as something for the owner to check rather than folding it into what passed.
 
 ## Never
