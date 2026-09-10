@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.2.1
 
+- The description now says what mutagens and mutations each do under this mod, and no longer says mutations are untouched.
+- The download now carries the changelog and a written comparison against the similar mods examined, so both can be read without opening the page.
 - A change to the description can no longer ship without the changelog saying what changed in it.
-- A written comparison against the similar mods examined is now kept alongside the mod.
 
 ## 1.2.0
 

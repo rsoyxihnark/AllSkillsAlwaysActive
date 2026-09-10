@@ -31,3 +31,13 @@ A: Not a bug. Firestream is one of the Seven skills that still require a slot, o
 5- Axii: Puppet
 6- Gorged on Power
 7- Battle Frenzy
+
+-MUTAGENS AND MUTATIONS-  TLDR; MUTAGENS VANILLA, MUTATIONS ALL ACTIVE.
+
+Mutagens work exactly as in vanilla. Mutations no longer do, as of 1.2.0. Neither needs an external tool.
+
+A mutagen's bonus is multiplied by how many same-colour skills you have SOCKETED in that mutagen's group - in vanilla it counts socketed skills, not learned ones. This mod changes which skills are ACTIVE, not what the mutagen math COUNTS: it overrides the game's "is this skill equipped" check, while the synergy calculation still reads the twelve slots directly.
+
+So if your slots sit empty, your mutagen sits at its plain base bonus. That is the vanilla multiplier having nothing to multiply, not the mod failing, and it is why the number moves as your socketing changes. The upside: socketing is now free. Your skills work either way, so the slots became pure mutagen optimisation - put three blue skills in the group holding your blue mutagen for maximum sign intensity. Only the seven behaviour-replacing skills have a real claim on a slot, which still leaves five spare.
+
+Mutations changed in 1.2.0: every mutation you have researched is now active at the same time, instead of only the one sitting in the mutations panel. Everything around them is still vanilla - the grid, the mutagen count that unlocks slots, each mutation's cost, and the panel still showing whichever one you slotted. This is the one place the mod now edits a second game file, playerWitcher.ws, so run Script Merger if another mod you use touches it. If you want the one-at-a-time rule back, stay on 1.1.1.
