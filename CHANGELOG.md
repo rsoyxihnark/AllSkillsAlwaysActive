@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 
 - Every mutation you have researched is now active at once, rather than only the one you have equipped in the mutations panel.
 - Every mutation that does something the moment a fight starts now does it, instead of only the first one taking effect.
