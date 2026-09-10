@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- The mod comparison now reads as a list instead of one run-on block, both in the download and on the page.
+
 ## 1.2.1
 
 - The description now says what mutagens and mutations each do under this mod, and no longer says mutations are untouched.
