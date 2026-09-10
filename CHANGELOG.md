@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.5
+
+- The description now says what to do when the game refuses to start and the script errors name another mod, such as Map Quest Objectives.
+- The description now names the one file to delete to clear that clash without a merging tool, which keeps every skill working and gives up only all mutations at once.
+
 ## 1.2.4
 
 - A skill you switch off now stays off through saves and reloads, instead of switching itself back on the next time you load.

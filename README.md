@@ -56,4 +56,19 @@ Vanilla makes you pick one mutation and live with it. Since 1.2.0 you do not: re
 
 Nothing else about them changed. Same grid, same research costs, same mutagen count to unlock slots, and the panel still shows whichever one you slotted. That slot just stopped being a limit on what actually runs.
 
-Heads up: this is the only thing in the mod that needs a second game file, playerWitcher.ws. If another mod you use touches that file, run Script Merger. Want the old one-at-a-time rule back? Stay on 1.1.1.
+Heads up: this is the only thing in the mod that needs a second game file, playerWitcher.ws. If another mod you use touches that file, read the next section. Want the old one-at-a-time rule back? Stay on 1.1.1.
+
+- SCRIPT ERRORS ON STARTUP -
+Q: The game will not start and the errors name a mod I did not expect, something like "'wmkMapMenu' is not a member of 'W3PlayerWitcher'". What is that?
+A: Two mods are shipping the same game file, playerWitcher.ws. The game loads exactly one copy of any script file, so the copy that loses takes that mod's additions down with it, and every line in that mod which used them stops compiling. Map Quest Objectives is the one this comes up with most. Any map, HUD or quest mod that adds something to Geralt can do it.
+
+Two ways out. Both work, pick whichever you prefer:
+
+1. Run Script Merger and let it merge playerWitcher.ws. This mod changes two things in that file and nothing else, OnCombatStart and IsMutationActive, and a map or HUD mod touches neither of them, so the merge goes through by itself and you keep both mods whole.
+
+2. Or delete this one file:
+...\The Witcher 3\mods\modAllSkillsAlwaysActive\content\scripts\game\player\playerWitcher.ws
+Nothing else in the mod needs it. Every skill still works without a slot, the catch up on a save already in progress still works, and the seven slot skills still behave the same. The only thing you give up is all mutations at once, which goes back to the vanilla one at a time. No tools and no merging, because the mod has stopped shipping the file they were fighting over.
+
+Q: Why can the mod not just leave that file alone and put the change somewhere else?
+A: There is nowhere else to put it. Both things that decide whether a mutation counts as active live inside playerWitcher.ws, and the game gives a mod no way to change one function on its own: you ship the whole file or you change nothing in it. Every mod that adds something to Geralt is in the same position, which is why they collide in the first place.
