@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Every mutation you have researched is now active at once, rather than only the one you have equipped in the mutations panel.
+- Every mutation that does something the moment a fight starts now does it, instead of only the first one taking effect.
 - The mod now changes playerWitcher.ws as well as playerAbilityManager.ws, so run Script Merger if another mod you use touches that file.
 
 ## 1.1.1

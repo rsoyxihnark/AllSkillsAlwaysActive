@@ -272,6 +272,62 @@
   "base": "game/player/playerWitcher.ws",
   "edits": [
    {
+    "name": "letting every active mutation take effect at combat start, not just the first",
+    "function": "event OnCombatStart()",
+    "before": [
+     "\t\t\tAddEffectDefault( EET_Mutation4, this, \"combat start\", false );",
+     "\t\t}"
+    ],
+    "remove": [
+     "\t\telse if( IsMutationActive( EPMT_Mutation5 ) && GetStat( BCS_Focus ) >= 1.f )"
+    ],
+    "insert": [
+     "\t\tif( IsMutationActive( EPMT_Mutation5 ) && GetStat( BCS_Focus ) >= 1.f )"
+    ]
+   },
+   {
+    "name": "letting every active mutation take effect at combat start, not just the first",
+    "function": "event OnCombatStart()",
+    "before": [
+     "\t\t}",
+     "\t\t"
+    ],
+    "remove": [
+     "\t\telse if( IsMutationActive( EPMT_Mutation7 ) )"
+    ],
+    "insert": [
+     "\t\tif( IsMutationActive( EPMT_Mutation7 ) )"
+    ]
+   },
+   {
+    "name": "letting every active mutation take effect at combat start, not just the first",
+    "function": "event OnCombatStart()",
+    "before": [
+     "\t\t\t",
+     "\t\t}"
+    ],
+    "remove": [
+     "\t\telse if( IsMutationActive( EPMT_Mutation8 ) )"
+    ],
+    "insert": [
+     "\t\tif( IsMutationActive( EPMT_Mutation8 ) )"
+    ]
+   },
+   {
+    "name": "letting every active mutation take effect at combat start, not just the first",
+    "function": "event OnCombatStart()",
+    "before": [
+     "\t\t}",
+     "\t\t"
+    ],
+    "remove": [
+     "\t\telse if( IsMutationActive( EPMT_Mutation10 ) )"
+    ],
+    "insert": [
+     "\t\tif( IsMutationActive( EPMT_Mutation10 ) )"
+    ]
+   },
+   {
     "name": "counting every researched mutation as active",
     "function": "public final function IsMutationActive( mutationType : EPlayerMutationType) : bool",
     "before": [
