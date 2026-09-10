@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.2.3
 
+- The description now explains the mutation change in plain terms, instead of a line that read as though mutations had stopped working.
 - A version the checks cannot read is now reported plainly, instead of stopping the build with an error of its own.
 - Files left behind by an earlier build no longer make the checks fail.
 

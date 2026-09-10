@@ -2,7 +2,7 @@
 
 ✅Every skill you learn works immediately without equipping.
 ✅It works on a fresh game or mid-playthrough save.
-✅Every mutation you research stays active, all of them at once, not just the one in the slot.
+✅Every mutation you research runs at once, no more picking one and losing the rest.
 ❌No skill slot needed.
 ❌No reset & re-learning ability points with Potion of Clearance needed.
 
@@ -14,7 +14,7 @@ INSTALLATION
 HOW TO CHECK IT IS WORKING
 - Learn Strong Back without socketing it: your carry weight rises immediately.
 - Learn Acquired Tolerance: your maximum toxicity climbs with every alchemy formula you know.
-- Research a second mutation: the first one keeps working, and the mutations panel still shows whichever you slotted.
+- Research a second mutation: the first one keeps working too. Both are on.
 
 UNINSTALLATION
 1. Drink a Potion of Clearance, then save and quit. Debug console command below:
@@ -32,12 +32,16 @@ A: Not a bug. Firestream is one of the Seven skills that still require a slot, o
 6- Gorged on Power
 7- Battle Frenzy
 
--MUTAGENS AND MUTATIONS-  TLDR; MUTAGENS VANILLA, MUTATIONS ALL ACTIVE.
+-MUTAGENS AND MUTATIONS-  TLDR; MUTAGENS UNTOUCHED, ALL YOUR MUTATIONS RUN AT ONCE.
 
-Mutagens work exactly as in vanilla. Mutations no longer do, as of 1.2.0. Neither needs an external tool.
+Mutagens work exactly as in vanilla, untouched. Mutations got better in 1.2.0: all of them run at once now. Neither needs an external tool.
 
 A mutagen's bonus is multiplied by how many same-colour skills you have SOCKETED in that mutagen's group - in vanilla it counts socketed skills, not learned ones. This mod changes which skills are ACTIVE, not what the mutagen math COUNTS: it overrides the game's "is this skill equipped" check, while the synergy calculation still reads the twelve slots directly.
 
 So if your slots sit empty, your mutagen sits at its plain base bonus. That is the vanilla multiplier having nothing to multiply, not the mod failing, and it is why the number moves as your socketing changes. The upside: socketing is now free. Your skills work either way, so the slots became pure mutagen optimisation - put three blue skills in the group holding your blue mutagen for maximum sign intensity. Only the seven behaviour-replacing skills have a real claim on a slot, which still leaves five spare.
 
-Mutations changed in 1.2.0: every mutation you have researched is now active at the same time, instead of only the one sitting in the mutations panel. Everything around them is still vanilla - the grid, the mutagen count that unlocks slots, each mutation's cost, and the panel still showing whichever one you slotted. This is the one place the mod now edits a second game file, playerWitcher.ws, so run Script Merger if another mod you use touches it. If you want the one-at-a-time rule back, stay on 1.1.1.
+Vanilla makes you pick one mutation and live with it. Since 1.2.0 you do not: research Euphoria and Metamorphosis and you get both, running together, permanently. Every mutation you have researched is on, all the time.
+
+Nothing else about them changed. Same grid, same research costs, same mutagen count to unlock slots, and the panel still shows whichever one you slotted. That slot just stopped being a limit on what actually runs.
+
+Heads up: this is the only thing in the mod that needs a second game file, playerWitcher.ws. If another mod you use touches that file, run Script Merger. Want the old one-at-a-time rule back? Stay on 1.1.1.
