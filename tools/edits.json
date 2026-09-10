@@ -130,7 +130,7 @@
      "\t\t\t\tif(GetSkillSlotID(catchUpSkill) > 0)",
      "\t\t\t\t\tcontinue;",
      "\t\t\t\t",
-     "\t\t\t\tif(skills[catchUpSkill].remainingBlockedTime > 0 || IsAbilityBlocked(skills[catchUpSkill].abilityName))",
+     "\t\t\t\tif(skills[catchUpSkill].remainingBlockedTime != 0 || IsAbilityBlocked(skills[catchUpSkill].abilityName))",
      "\t\t\t\t\tcontinue;",
      "\t\t\t\t",
      "\t\t\t\tcatchUpAbilityName = skills[catchUpSkill].abilityName;",
@@ -194,7 +194,7 @@
      "\t\tif(activeSkills.Contains(skill))",
      "\t\t{",
      "\t\t\tif(skills[skill].level >= 1) OnSkillUnequip(skill);",
-     "\t\t\tif(skills[skill].remainingBlockedTime <= 0 && !IsAbilityBlocked(skills[skill].abilityName))",
+     "\t\t\tif(skills[skill].remainingBlockedTime == 0 && !IsAbilityBlocked(skills[skill].abilityName))",
      "\t\t\t\tOnSkillEquip(skill);",
      "\t\t}",
      "\t\t"

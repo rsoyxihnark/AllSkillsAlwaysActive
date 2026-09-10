@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.4
+
+- A skill you switch off now stays off through saves and reloads, instead of switching itself back on the next time you load.
+- The description now shows how to switch a single skill off and on again with the game's own console.
+
 ## 1.2.3
 
 - The description now explains the mutation change in plain terms, instead of a line that read as though mutations had stopped working.
