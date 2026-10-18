@@ -3,13 +3,18 @@
 ✅Every skill you learn works immediately without equipping.
 ✅It works on a fresh game or mid-playthrough save.
 ✅Every mutation you research runs at once, no more picking one and losing the rest.
+✅Made for the Remaster, and works with its new skill tree and the old one alike.
 ❌No skill slot needed.
 ❌No reset & re-learning ability points with Potion of Clearance needed.
 
 INSTALLATION
 
+Needs the Remastered game. Still on the game before the Remaster? Use 1.2.5 instead.
+
 1. Copy the modAllSkillsAlwaysActive folder into "...\Steam\steamapps\common\The Witcher 3\mods".
 2. Launch & enjoy, no action required even on an existing save. Activates on the first gameload automatically.
+
+Coming from a save made before the Remaster? The game itself hands back all your skill points on the first load. Every skill you put them back into works straight away.
 
 HOW TO CHECK IT IS WORKING
 - Learn Strong Back without socketing it: your carry weight rises immediately.
@@ -31,6 +36,7 @@ A: Not a bug. Firestream is one of the Seven skills that still require a slot, o
 5- Axii: Puppet
 6- Gorged on Power
 7- Battle Frenzy
+The Remaster's new skill tree has its own Firestream, Puppet and Battle Frenzy, and those stay slot skills as well.
 
 - TURNING A SKILL OFF -
 Q: Heavy Artillery halves my bombs, Fast Metabolism fights my Metamorphosis build. Can I switch one off without a Potion of Clearance?
@@ -56,7 +62,7 @@ Vanilla makes you pick one mutation and live with it. Since 1.2.0 you do not: re
 
 Nothing else about them changed. Same grid, same research costs, same mutagen count to unlock slots, and the panel still shows whichever one you slotted. That slot just stopped being a limit on what actually runs.
 
-Heads up: this is the only thing in the mod that needs a second game file, playerWitcher.ws. If another mod you use touches that file, read the next section. Want the old one-at-a-time rule back? Stay on 1.1.1.
+Heads up: this is the only thing in the mod that needs a second game file, playerWitcher.ws. If another mod you use touches that file, read the next section. Want the old one-at-a-time rule back? Delete that one file, as the next section shows.
 
 - SCRIPT ERRORS ON STARTUP -
 Q: The game will not start and the errors name a mod I did not expect, something like "'wmkMapMenu' is not a member of 'W3PlayerWitcher'". What is that?

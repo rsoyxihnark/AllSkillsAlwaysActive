@@ -20,7 +20,7 @@
     "function": "public final function PostInit()",
     "before": [
      "\t{\t\t",
-     "\t\tvar i, playerLevel : int;"
+     "\t\tvar i, used, free, mutationPoints, skillPoints : int;"
     ],
     "remove": [],
     "insert": [
@@ -117,6 +117,55 @@
      "\t\tactiveSkills.PushBack(S_Perk_12); // General - Metabolic Control",
      "\t\tactiveSkills.PushBack(S_Perk_22); // General - Strong Back",
      "\t\tactiveSkills.PushBack(S_Perk_21); // General - Attack is the Best Defense",
+     "\t\tactiveSkills.PushBack(S_Sword_s22); // Combat - Muscle Memory",
+     "\t\tactiveSkills.PushBack(S_Sword_s23); // Combat - Strength Training",
+     "\t\tactiveSkills.PushBack(S_Sword_s24); // Combat - Precise Blows",
+     "\t\tactiveSkills.PushBack(S_Sword_s25); // Combat - Crushing Blows",
+     "\t\tactiveSkills.PushBack(S_Sword_s26); // Combat - Anatomical Knowledge",
+     "\t\tactiveSkills.PushBack(S_Sword_s27); // Combat - Crippling Shot",
+     "\t\tactiveSkills.PushBack(S_Sword_s28); // Combat - Sunder Armor",
+     "\t\tactiveSkills.PushBack(S_Sword_s29); // Combat - Crippling Strikes",
+     "\t\tactiveSkills.PushBack(S_Sword_s30); // Combat - Deadly Precision",
+     "\t\tactiveSkills.PushBack(S_Sword_s31); // Combat - Counter Attack",
+     "\t\tactiveSkills.PushBack(S_Sword_s32); // Combat - Lightning Reflexes",
+     "\t\tactiveSkills.PushBack(S_Sword_s33); // Combat - Arrow Deflection",
+     "\t\tactiveSkills.PushBack(S_Sword_s34); // Combat - Cold Blood",
+     "\t\tactiveSkills.PushBack(S_Sword_s35); // Combat - Whirl",
+     "\t\tactiveSkills.PushBack(S_Sword_s36); // Combat - Fleet Footed",
+     "\t\tactiveSkills.PushBack(S_Magic_s33); // Signs - Shock Wave",
+     "\t\tactiveSkills.PushBack(S_Magic_s35); // Signs - Catalyst",
+     "\t\tactiveSkills.PushBack(S_Magic_s36); // Signs - Fortified Signs",
+     "\t\tactiveSkills.PushBack(S_Magic_s37); // Signs - Convergence Theory",
+     "\t\tactiveSkills.PushBack(S_Magic_s38); // Signs - Focus",
+     "\t\tactiveSkills.PushBack(S_Magic_s39); // Signs - Avoidance",
+     "\t\tactiveSkills.PushBack(S_Magic_s40); // Signs - Overload",
+     "\t\tactiveSkills.PushBack(S_Magic_s41); // Signs - Resonance",
+     "\t\tactiveSkills.PushBack(S_Magic_s42); // Signs - Sustained Glyphs",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s22); // Alchemy - Debilitating Poison",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s23); // Alchemy - Toxic Shock",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s24); // Alchemy - Heightened Tolerance",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s25); // Alchemy - Volatile Concoction",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s26); // Alchemy - Wyvern Sting",
+     "\t\tactiveSkills.PushBack(S_Alchemy_s27); // Alchemy - Hunter Instinct",
+     "\t\tactiveSkills.PushBack(S_Perk_23); // General - Cat School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_24); // General - Griffin School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_25); // General - Bear School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_26); // General - Wolven School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_27); // General - Manticore School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_28); // General - Viper School Technique",
+     "\t\tactiveSkills.PushBack(S_Perk_30); // General - Survival Instinct",
+     "\t\tactiveSkills.PushBack(S_Perk_31); // General - Attack is the Best Defense",
+     "\t\tactiveSkills.PushBack(S_Perk_32); // General - Metabolism Boost",
+     "\t\tactiveSkills.PushBack(S_Perk_33); // General - Metabolic Control",
+     "\t\tactiveSkills.PushBack(S_Perk_34); // General - Rage Management",
+     "\t\tactiveSkills.PushBack(S_Perk_35); // General - Strong Back",
+     "\t\tactiveSkills.PushBack(S_Perk_37); // General - Conjunction",
+     "\t\tactiveSkills.PushBack(S_Perk_38); // General - Sun and Stars",
+     "\t\tactiveSkills.PushBack(S_Perk_39); // General - Advanced Pyrotechnics",
+     "\t\tactiveSkills.PushBack(S_Perk_41); // General - Gourmet",
+     "\t\tactiveSkills.PushBack(S_Perk_42); // General - Adrenaline Burst",
+     "\t\tactiveSkills.PushBack(S_Perk_43); // General - Synergy",
+     "\t\tactiveSkills.PushBack(S_Perk_44); // General - Element of Surprise",
      "\t\t",
      "\t\tif( (W3PlayerWitcher)owner )",
      "\t\t{",
@@ -204,8 +253,8 @@
     "name": "leaving an always active skill alone when a slot is filled",
     "function": "public final function EquipSkill(skill : ESkill, slotID : int) : bool",
     "before": [
-     "\t\t",
-     "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
+     "\t\tskillSlots[idx].socketedSkill = skill;",
+     "\t\t"
     ],
     "remove": [
      "\t\tOnSkillEquip(skill);"
@@ -221,8 +270,8 @@
     "name": "leaving an always active skill alone when a slot is emptied",
     "function": "public final function UnequipSkill(slotID : int) : bool",
     "before": [
-     "\t\tprevColor = GetSkillGroupColor(skillSlots[idx].groupID);",
-     "\t\tLinkUpdate(GetSkillGroupColor(skillSlots[idx].groupID), prevColor);"
+     "\t\tskillSlots[idx].socketedSkill = S_SUndefined;",
+     "\t\tprevColor = GetSkillGroupColor(skillSlots[idx].groupID);"
     ],
     "remove": [
      "\t\tOnSkillUnequip(skill);"
@@ -332,7 +381,7 @@
     "function": "public final function IsMutationActive( mutationType : EPlayerMutationType) : bool",
     "before": [
      "\t\tvar sword : SItemUniqueId;",
-     "\t\t"
+     ""
     ],
     "remove": [
      "\t\tif( GetEquippedMutationType() != mutationType )"

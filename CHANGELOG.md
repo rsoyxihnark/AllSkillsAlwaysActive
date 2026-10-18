@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0
+
+- The mod now runs on the Remastered game, so anyone still on the game before the Remaster should stay on 1.2.5.
+- Every skill in the Remaster's new skill tree now works without a slot, the same as the skills of the old tree.
+- The Remaster's own Firestream, Puppet and Battle Frenzy stay slot skills, like the versions before them.
+- Every mutation you have researched still runs at once on the Remaster.
+- The description now says which game each version is for, what happens to your skill points on a save from before the Remaster, and how to get one mutation at a time back.
+- The mod comparison now says it was written for the game before the Remaster, gives this mod's new skill count, and no longer thanks or credits the other mods.
+- The checks now also catch the Remaster's Firestream, Puppet or Battle Frenzy being made to work without a slot by mistake.
+- The mod's recorded changes now rebuild it exactly onto the Remaster's own game scripts.
+
 ## 1.2.5
 
 - The description now says what to do when the game refuses to start and the script errors name another mod, such as Map Quest Objectives.
