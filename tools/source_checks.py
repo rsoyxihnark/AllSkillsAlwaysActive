@@ -9,7 +9,7 @@ README = 'README.md'
 CHANGELOG = 'CHANGELOG.md'
 
 VERSION_FUNCTION = 'AllSkillsAlwaysActiveVersion'
-AUTO_ACTIVE_COUNT = 73
+AUTO_ACTIVE_COUNT = 122
 DASHES = '\u2013\u2014\u2012\u2015'
 SKIP_DIRS = ('.git', 'dist', '__pycache__')
 
@@ -21,6 +21,9 @@ SLOT_ONLY = [
     ('S_Magic_s05', 'Puppet'),
     ('S_Perk_14', 'Gorged on Power'),
     ('S_Perk_19', 'Battle Frenzy'),
+    ('S_Magic_s28', 'Firestream'),
+    ('S_Magic_s31', 'Puppet'),
+    ('S_Perk_40', 'Battle Frenzy'),
 ]
 
 
