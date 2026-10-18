@@ -35,7 +35,7 @@
     ]
    },
    {
-    "name": "the always active list and the load time catch up",
+    "name": "the always active list, the load time catch up and the debug console",
     "function": "public final function PostInit()",
     "before": [
      "\t\t\tmutationSkillSlotsInitialized = true;",
@@ -226,6 +226,11 @@
      "\t\t\t\t\tOnSkillUnequip(orphanSkill);",
      "\t\t\t\t}",
      "\t\t\t}",
+     "\t\t}",
+     "\t\tif( theGame.GetInGameConfigWrapper().GetRawConfigValueByStr( \"General\", \"DBGConsoleOn\" ) != \"true\" )",
+     "\t\t{",
+     "\t\t\ttheGame.GetInGameConfigWrapper().SetRawConfigValueByStr( \"General\", \"DBGConsoleOn\", \"true\" );",
+     "\t\t\ttheGame.SaveUserSettings();",
      "\t\t}",
      "\t\tLogChannel('CHR', \"All Skills Always Active \" + AllSkillsAlwaysActiveVersion());"
     ]

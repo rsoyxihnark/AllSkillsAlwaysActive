@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+- The mod now switches on the game's debug console, so it opens with the key left of 1 without editing any game file.
+- The description now says how to open the debug console and that it stays on after you remove the mod.
+
 ## 2.0.0
 
 - The mod now runs on the Remastered game, so anyone still on the game before the Remaster should stay on 1.2.5.
