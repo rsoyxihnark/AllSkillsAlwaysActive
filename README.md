@@ -4,6 +4,7 @@
 ✅It works on a fresh game or mid-playthrough save.
 ✅Every mutation you research runs at once, no more picking one and losing the rest.
 ✅Made for the Remaster, and works with its new skill tree and the old one alike.
+✅The debug console is switched on for you: press the key left of 1.
 ❌No skill slot needed.
 ❌No reset & re-learning ability points with Potion of Clearance needed.
 
@@ -25,6 +26,7 @@ UNINSTALLATION
 1. Drink a Potion of Clearance, then save and quit. Debug console command below:
 additem('Clearing Potion')
 2. Delete the modAllSkillsAlwaysActive folder.
+The debug console stays switched on afterwards, because the game keeps that setting itself.
 
 - SIGNS -
 Q: Why eg:Igni still casts the normal burst instead of Firestream?
