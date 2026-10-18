@@ -17,6 +17,7 @@ SLOT_ONLY = [
     ('S_Magic_s01', 'Sweep'),
     ('S_Magic_s02', 'Firestream'),
     ('S_Magic_s03', 'Magic Trap'),
+    # In game, learnskillId(S_Magic_s04) ranks Active Shield in the Remaster tree and S_Magic_s14 does not, whatever SkillEnumToRemasterName says.
     ('S_Magic_s04', 'Active Shield'),
     ('S_Magic_s05', 'Puppet'),
     ('S_Perk_14', 'Gorged on Power'),
@@ -25,6 +26,7 @@ SLOT_ONLY = [
     ('S_Magic_s31', 'Puppet'),
     ('S_Perk_40', 'Battle Frenzy'),
 ]
+OLD_TREE_ONLY = ('S_Magic_s02', 'S_Magic_s05', 'S_Perk_14', 'S_Perk_19')
 
 
 def read_utf16(path):
@@ -167,7 +169,7 @@ def main(argv):
         if skill in seen:
             wrong.append(shown + ' (' + skill + ') replaces a default behaviour, so it stays slot-based '
                          'and may not sit in the always-active list')
-        if shown.lower() not in shown_to_players:
+        if skill not in OLD_TREE_ONLY and shown.lower() not in shown_to_players:
             wrong.append(README + ' does not name ' + shown + ', which still needs a skill slot')
 
     equipped = re.search(r'function\s+IsSkillEquipped\s*\([^)]*\)\s*:\s*bool\s*\{(.*?)\n\t\}', code, re.S)

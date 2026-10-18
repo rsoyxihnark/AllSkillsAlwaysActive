@@ -7,10 +7,15 @@ MOD = os.path.join(ROOT, 'modAllSkillsAlwaysActive')
 
 
 def read_ws(path):
+    # The Remaster's own scripts come straight from the game as UTF-8, while the shipped copies stay UTF-16, which the game's compile log showed it accepts.
     raw = io.open(path, 'rb').read()
-    if not raw.startswith(b'\xff\xfe'):
-        raise ValueError(path + ' does not start with a UTF-16 little-endian mark')
-    return raw.decode('utf-16').replace('\r\n', '\n').split('\n')
+    if raw.startswith(b'\xff\xfe'):
+        text = raw.decode('utf-16')
+    elif b'\x00' in raw:
+        raise ValueError(path + ' is neither UTF-16 with its mark nor UTF-8')
+    else:
+        text = raw.decode('utf-8-sig')
+    return text.replace('\r\n', '\n').split('\n')
 
 
 def write_ws(path, lines):

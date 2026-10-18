@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+
+- The description no longer covers the game before the Remaster or its old skill tree, and now lists the six skills that still need a slot.
+- The description now says where to look up the code of a skill you want to switch off, instead of pointing at a console command that only writes to the game's log.
+- The description now explains the two harmless warnings that name this mod when the game lists script errors.
+- The mod's scripts now carry short notes for other modders on the few things that could only be confirmed by testing in the game.
+- The mod can now be rebuilt straight from the Remaster's own game scripts, without converting them first.
+
 ## 2.1.0
 
 - The mod now switches on the game's debug console, so it opens with the key left of 1 without editing any game file.
