@@ -172,3 +172,23 @@ jobs:
           done
           echo "could not publish $VERSION after 5 attempts - the mod zip is still on the run as an artifact"
           exit 1
+
+      - name: Bring the published notes in line with the changelog
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for version in $(sed -nE 's/^##[[:space:]]+([0-9]+\.[0-9]+\.[0-9]+)[[:space:]]*$/\1/p' CHANGELOG.md); do
+            if ! published=$(gh release view "v$version" --json body -q .body 2>/dev/null); then
+              echo "$version has no published release, so there is no note to bring in line"
+              continue
+            fi
+            wanted=$(python3 tools/nexus_changelog.py --notes "$version")
+            if [ "$(printf '%s\n' "$published" | tr -d '\r' | sed 's/[[:space:]]*$//')" = "$(printf '%s\n' "$wanted" | sed 's/[[:space:]]*$//')" ]; then
+              continue
+            fi
+            printf '%s\n' "$wanted" > release-notes.md
+            gh release edit "v$version" --notes-file release-notes.md
+            echo "the published notes for $version now say what the changelog says"
+          done
