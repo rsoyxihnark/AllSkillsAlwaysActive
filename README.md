@@ -26,7 +26,8 @@ The debug console stays switched on afterwards, because the game keeps that sett
 
 - SIGNS -
 Q: Why eg:Igni still casts the normal burst instead of Firestream?
-A: Not a bug. Firestream is one of the Six skills that still require a slot, opt-in on purpose. Socket it, then hold the cast button for the stream /OR/ tap for the normal burst. Good news is since nothing else competes for slots anymore, you have 12 free slots for exactly these 6. Socket them all and literally everything in the game is active at once.
+A: Not a bug. Firestream is one of the Six skills that still require a slot, opt-in on purpose. Socket it, then hold the cast button for the stream /OR/ tap for the normal burst.
+Good news is since nothing else competes for slots anymore, you have 12 free slots for exactly these 6. Socket them all and literally everything in the game is active at once.
 1- Aard: Sweep
 2- Igni: Firestream
 3- Yrden: Magic Trap
@@ -49,9 +50,15 @@ Want a different one? Open modAllSkillsAlwaysActive\content\scripts\game\gamepla
 
 Mutagens work exactly as in vanilla, untouched. Mutations got better: all of them run at once. Neither needs an external tool.
 
-A mutagen's bonus is multiplied by how many same-colour skills you have SOCKETED in that mutagen's group - in vanilla it counts socketed skills, not learned ones. This mod changes which skills are ACTIVE, not what the mutagen math COUNTS: it overrides the game's "is this skill equipped" check, while the synergy calculation still reads the twelve slots directly.
+A mutagen's bonus is multiplied by how many same-colour skills you have SOCKETED in that mutagen's group - in vanilla it counts socketed skills, not learned ones.
 
-So if your slots sit empty, your mutagen sits at its plain base bonus. That is the vanilla multiplier having nothing to multiply, not the mod failing, and it is why the number moves as your socketing changes. The upside: socketing is now free. Your skills work either way, so the slots became pure mutagen optimisation - put three blue skills in the group holding your blue mutagen for maximum sign intensity. Only the six behaviour-replacing skills have a real claim on a slot, which still leaves six spare.
+This mod changes which skills are ACTIVE, not what the mutagen math COUNTS: it overrides the game's "is this skill equipped" check, while the synergy calculation still reads the twelve slots directly.
+
+So if your slots sit empty, your mutagen sits at its plain base bonus. That is the vanilla multiplier having nothing to multiply, not the mod failing, and it is why the number moves as your socketing changes.
+
+The upside: socketing is now free. Your skills work either way, so the slots became pure mutagen optimisation - put three blue skills in the group holding your blue mutagen for maximum sign intensity.
+
+Only the six behaviour-replacing skills have a real claim on a slot, which still leaves six spare.
 
 Vanilla makes you pick one mutation and live with it. With this mod you do not: research Euphoria and Metamorphosis and you get both, running together, permanently. Every mutation you have researched is on, all the time.
 
@@ -61,18 +68,22 @@ Heads up: this is the only thing in the mod that needs a second game file, playe
 
 - SCRIPT ERRORS ON STARTUP -
 Q: The game will not start and the errors name a mod I did not expect, something like "'wmkMapMenu' is not a member of 'W3PlayerWitcher'". What is that?
-A: Two mods are shipping the same game file, playerWitcher.ws. The game loads exactly one copy of any script file, so the copy that loses takes that mod's additions down with it, and every line in that mod which used them stops compiling. Map Quest Objectives is the one this comes up with most. Any map, HUD or quest mod that adds something to Geralt can do it.
+A: Two mods are shipping the same game file, playerWitcher.ws. The game loads exactly one copy of any script file, so the copy that loses takes that mod's additions down with it, and every line in that mod which used them stops compiling.
+Map Quest Objectives is the one this comes up with most. Any map, HUD or quest mod that adds something to Geralt can do it.
 
 Two ways out. Both work, pick whichever you prefer:
 
-1. Run Script Merger and let it merge playerWitcher.ws. This mod changes two things in that file and nothing else, OnCombatStart and IsMutationActive, and a map or HUD mod touches neither of them, so the merge goes through by itself and you keep both mods whole.
+1. Run Script Merger and let it merge playerWitcher.ws. This mod changes two things in that file and nothing else, OnCombatStart and IsMutationActive.
+A map or HUD mod touches neither of them, so the merge goes through by itself and you keep both mods whole.
 
 2. Or delete this one file:
 ...\The Witcher 3\mods\modAllSkillsAlwaysActive\content\scripts\game\player\playerWitcher.ws
-Nothing else in the mod needs it. Every skill still works without a slot, the catch up on a save already in progress still works, and the six slot skills still behave the same. The only thing you give up is all mutations at once, which goes back to the vanilla one at a time. No tools and no merging, because the mod has stopped shipping the file they were fighting over.
+Nothing else in the mod needs it. Every skill still works without a slot, the catch up on a save already in progress still works, and the six slot skills still behave the same.
+The only thing you give up is all mutations at once, which goes back to the vanilla one at a time. No tools and no merging, because the mod has stopped shipping the file they were fighting over.
 
 Q: Why can the mod not just leave that file alone and put the change somewhere else?
-A: There is nowhere else to put it. Both things that decide whether a mutation counts as active live inside playerWitcher.ws, and the game gives a mod no way to change one function on its own: you ship the whole file or you change nothing in it. Every mod that adds something to Geralt is in the same position, which is why they collide in the first place.
+A: There is nowhere else to put it. Both things that decide whether a mutation counts as active live inside playerWitcher.ws.
+The game gives a mod no way to change one function on its own: you ship the whole file or you change nothing in it. Every mod that adds something to Geralt is in the same position, which is why they collide in the first place.
 
 Q: The error list also shows two warnings naming this mod, about OnEssenceChanged and Agony. Is something broken?
 A: No. Those warnings come from the game's own copies of those two files, which this mod ships with its changes on top. The game prints the same warning for dozens of its own files, and a warning never stops it from starting.
