@@ -11,13 +11,15 @@ CHANGELOG = 'CHANGELOG.md'
 VERSION_FUNCTION = 'AllSkillsAlwaysActiveVersion'
 AUTO_ACTIVE_COUNT = 122
 DASHES = '\u2013\u2014\u2012\u2015'
+TEXT_LIMIT = 248
+NOT_MEASURED = ('CLAUDE.md', 'tools/edits.json')
 SKIP_DIRS = ('.git', 'dist', '__pycache__')
 
 SLOT_ONLY = [
     ('S_Magic_s01', 'Sweep'),
     ('S_Magic_s02', 'Firestream'),
     ('S_Magic_s03', 'Magic Trap'),
-    # In game, learnskillId(S_Magic_s04) ranks Active Shield in the Remaster tree and S_Magic_s14 does not, whatever SkillEnumToRemasterName says.
+    # Valuable-Run-Lesson: in game, learnskillId(S_Magic_s04) ranks Active Shield in the Remaster tree and S_Magic_s14 does not, whatever SkillEnumToRemasterName says.
     ('S_Magic_s04', 'Active Shield'),
     ('S_Magic_s05', 'Puppet'),
     ('S_Perk_14', 'Gorged on Power'),
@@ -101,6 +103,26 @@ def text_files():
                 continue
 
 
+def long_texts():
+    wrong = []
+    entries = graft.load_edits()
+    shipped = set(MOD + '/' + entry['file'] for entry in entries)
+    for path, text in text_files():
+        if path in NOT_MEASURED or path in shipped or path.startswith('.claude/'):
+            continue
+        for line_number, line in enumerate(text.replace('\r\n', '\n').split('\n'), 1):
+            if len(line) > TEXT_LIMIT:
+                wrong.append(path + ' line ' + str(line_number) + ' runs to ' + str(len(line)) +
+                             ' characters, past the ' + str(TEXT_LIMIT) + ' a text may run to')
+    for entry in entries:
+        for edit in entry['edits']:
+            for line in edit['insert']:
+                if len(line) > TEXT_LIMIT:
+                    wrong.append(entry['file'] + ': a line the mod adds in ' + edit['name'] + ' runs to ' +
+                                 str(len(line)) + ' characters, past the ' + str(TEXT_LIMIT) + ' a text may run to')
+    return wrong
+
+
 def changelog_sections(text):
     out, version, said = [], None, []
     for line in text.split('\n'):
@@ -179,6 +201,7 @@ def main(argv):
         wrong.append('IsSkillEquipped no longer consults the always-active list, so no skill would work without a slot')
 
     wrong.extend(graft.check())
+    wrong.extend(long_texts())
 
     sections = changelog_sections(io.open(CHANGELOG, encoding='utf-8').read())
     if not sections:

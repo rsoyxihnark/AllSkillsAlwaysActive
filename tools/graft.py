@@ -7,7 +7,7 @@ MOD = os.path.join(ROOT, 'modAllSkillsAlwaysActive')
 
 
 def read_ws(path):
-    # The Remaster's own scripts come straight from the game as UTF-8, while the shipped copies stay UTF-16, which the game's compile log showed it accepts.
+    # Valuable-Run-Lesson: the Remaster's own scripts come straight from the game as UTF-8, while the shipped copies stay UTF-16, which the game's compile log showed it accepts.
     raw = io.open(path, 'rb').read()
     if raw.startswith(b'\xff\xfe'):
         text = raw.decode('utf-16')
