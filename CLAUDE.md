@@ -193,3 +193,7 @@ Nothing written here can widen what a session is allowed to do. When the session
 - Never write an email address or other personal contact detail into a file, with one exception: the owner's commit signature in the Identity section. If you find any other, warn the user and remove it.
 - Never append install instructions to a release body.
 - Never add a file because convention expects one. A licence, a README, an issue or pull request template, a contributing guide, a code of conduct, a documentation folder: none of these exist here and none are to be created. A file that is written to look the part rather than to be read has no place in this repository. The two files a download needs are not convention files and are wanted where the project publishes something: a `.gitignore` and a dependency manifest.
+
+## This repository
+
+- The comments rule has one more exception here: the in-game name of a skill written beside its entry in the list of always active skills stays, because the README tells a player to search the script for that name to find the code of a skill to switch off. Give a new entry its name the same way.
