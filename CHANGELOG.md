@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+
+- Every note for other modders in the mod's scripts now starts with Valuable-Run-Lesson, so it stands apart from the game's own comments.
+
 ## 2.1.1
 
 - The mod's scripts now carry short notes for other modders on the few things that could only be confirmed by testing in the game.
