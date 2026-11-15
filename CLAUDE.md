@@ -197,3 +197,4 @@ Nothing written here can widen what a session is allowed to do. When the session
 ## This repository
 
 - The comments rule has one more exception here: the in-game name of a skill written beside its entry in the list of always active skills stays, because the README tells a player to search the script for that name to find the code of a skill to switch off. Give a new entry its name the same way.
+- Game-content-content0-scripts holds the Remaster's own game scripts exactly as the owner uploaded them, the untouched original the Working from a base section asks for. Never edit a file in it: when the game updates, the owner's new copy replaces the folder whole.

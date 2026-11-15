@@ -4,6 +4,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 EDITS = os.path.join(HERE, 'edits.json')
 MOD = os.path.join(ROOT, 'modAllSkillsAlwaysActive')
+BASE = os.path.join(ROOT, 'Game-content-content0-scripts')
 
 
 def read_ws(path):
@@ -72,6 +73,13 @@ def check():
             wrong.append('tools/edits.json no longer describes ' + entry['file'] +
                          '; update it in the same commit as the change')
             continue
+        original = os.path.join(BASE, entry['base'])
+        if not os.path.isfile(original):
+            wrong.append(entry['base'] + ' is the base tools/edits.json names, and ' +
+                         os.path.basename(BASE) + ' does not hold it')
+        elif read_ws(original) != base:
+            wrong.append(entry['file'] + " is not the game's own " + entry['base'] +
+                         ' plus the edits tools/edits.json records')
         rebuilt, missed = apply(base, entry['edits'])
         wrong.extend(entry['file'] + ': ' + line for line in missed)
         if not missed and rebuilt != modded:
@@ -129,8 +137,8 @@ def main(argv):
         if wrong:
             return 1
         total = sum(len(e['edits']) for e in entries)
-        sys.stdout.write('the edit set rebuilds ' + str(len(entries)) + ' shipped scripts exactly, across ' +
-                         str(total) + ' edits\n')
+        sys.stdout.write("the edit set turns the game's own scripts into the " + str(len(entries)) +
+                         ' shipped ones exactly, across ' + str(total) + ' edits\n')
         return 0
 
     sys.stderr.write('usage: graft.py [--verify] | --vanilla OUTDIR | --apply BASEDIR OUTDIR\n')

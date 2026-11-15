@@ -14,6 +14,7 @@ DASHES = '\u2013\u2014\u2012\u2015'
 TEXT_LIMIT = 248
 NOT_MEASURED = ('CLAUDE.md', 'tools/edits.json')
 SKIP_DIRS = ('.git', 'dist', '__pycache__')
+BASE_DIR = os.path.basename(graft.BASE)
 
 SLOT_ONLY = [
     ('S_Magic_s01', 'Sweep'),
@@ -95,7 +96,10 @@ def text_files():
         for name in sorted(names):
             path = os.path.relpath(os.path.join(root, name), '.').replace(os.sep, '/')
             if path.endswith('.ws'):
-                yield path, read_utf16(path)
+                if path.startswith(BASE_DIR + '/'):
+                    yield path, '\n'.join(graft.read_ws(path))
+                else:
+                    yield path, read_utf16(path)
                 continue
             try:
                 yield path, io.open(path, encoding='utf-8').read()
@@ -108,7 +112,7 @@ def long_texts():
     entries = graft.load_edits()
     shipped = set(MOD + '/' + entry['file'] for entry in entries)
     for path, text in text_files():
-        if path in NOT_MEASURED or path in shipped or path.startswith('.claude/'):
+        if path in NOT_MEASURED or path in shipped or path.startswith(('.claude/', BASE_DIR + '/')):
             continue
         for line_number, line in enumerate(text.replace('\r\n', '\n').split('\n'), 1):
             if len(line) > TEXT_LIMIT:
@@ -166,7 +170,7 @@ def main(argv):
         if not re.match(r'^\d+\.\d+\.\d+$', version):
             wrong.append('the version ' + version + ' is not three numbers separated by full stops')
         elsewhere = [p for p, t in text_files()
-                     if p != VERSION_FILE and re.search(r'"' + re.escape(version) + r'"', t)]
+                     if p != VERSION_FILE and not p.startswith(BASE_DIR + '/') and re.search(r'"' + re.escape(version) + r'"', t)]
         if elsewhere:
             wrong.append('the version is written into the source in more than one place: ' + ', '.join(elsewhere))
 
