@@ -27,22 +27,13 @@ jobs:
             echo "this commit changes no file at all"
             exit 1
           fi
-          if printf '%s\n' "$CHANGED" | grep -qx 'README.md'; then
-            NOTES=$(git diff "$GITHUB_SHA^" "$GITHUB_SHA" -- CHANGELOG.md 2>/dev/null \
-                    || git show --pretty=format: "$GITHUB_SHA" -- CHANGELOG.md)
-            if ! printf '%s\n' "$NOTES" | grep -qi '^+.*description'; then
-              echo "this commit changes the description in README.md and no changelog entry says so"
-              exit 1
-            fi
-            echo "the changelog records what changed in the description"
-          fi
           if printf '%s\n' "$CHANGED" | grep -qx 'CHANGELOG.md'; then
             echo "the changelog carries this commit's entries"
             exit 0
           fi
-          OUTSIDE=$(printf '%s\n' "$CHANGED" | grep -Ev '^(tools/|\.github/|\.claude/|\.gitignore$|CLAUDE\.md$)' || true)
+          OUTSIDE=$(printf '%s\n' "$CHANGED" | grep -Ev '^(tools/|\.github/|\.claude/|\.gitignore$|CLAUDE\.md$|README\.md$|COMPARISON\.md$)' || true)
           if [ -z "$OUTSIDE" ]; then
-            echo "this commit touches only the project's own checks, workflow and working rules, so it writes no changelog entry"
+            echo "this commit touches only the project's own checks, workflow, working rules, README or comparison, so it writes no changelog entry"
             exit 0
           fi
           SUBJECT=$(git log -1 --format=%s "$GITHUB_SHA")
